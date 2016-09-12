@@ -1,0 +1,227 @@
+<html>
+
+<head>
+    <title>Pretty. Math.</title>
+</head>
+
+<script src="lib/angular.js"></script>
+<script src="lib/ui-bootstrap.js"></script>
+<script src="lib/angular-animate.js"></script>
+
+<!--<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">-->
+
+<!--TD's in your code, using new style sheets-->
+<link rel="stylesheet" href="lib/w3.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lobster">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Dosis">
+<link rel="stylesheet" href="lib/stylezz.css">
+
+<script src="lib/jsxgraphcore.js" charset="utf-8"></script>
+<!---->
+<script src="lib/angular-jsx-graph.js"></script>
+<!---->
+<link href="https://fonts.googleapis.com/css?family=Galada" rel="stylesheet">
+
+<link href="lib/jsxgraph.css" rel="stylesheet">
+
+<script src="app.js"></script>
+<!---->
+<script src="graph.controller.js"></script>
+<!---->
+<script src="graph.service.js"></script>
+<!---->
+
+<style>
+    .logo {
+        margin-top: 0px;
+        margin-left: 0px;
+    }
+    
+    button {
+        margin-top: 15px;
+        margin-bottom: 10px;
+        font-family: 'Dosis';
+    }
+    
+    body {
+        background-color: #F5F5F5;
+    }
+    
+    h1 {
+        margin-top: 5px;
+        margin-left: 5px;
+        font-family: 'Lobster';
+    }
+
+    h4 {
+        font-family: 'Dosis';
+    }
+
+    .w3-lobster {
+        font-family: 'Lobster', serif;
+    }
+    .w3-dosis {
+        font-family: 'Dosis', serif;
+    }
+    .w3-invisible {
+        display: none;
+    }
+</style>
+
+<body ng-app="app" >
+    <!--<img src="img/logo.png" class="logo" />-->
+
+    <ul class="w3-navbar w3-theme-d5 w3-top w3-xlarge">
+      <li><a class="w3-pink w3-lobster w3-xlarge" href="#">fancygraf</a></li>
+      <li class="w3-right w3-center w3-xlarge"><a class="w3-hover-pink w3-right w3-dosis" href="javascript:void(0)" onclick="w3_open()">Notes</a></li>
+    </ul>
+
+<!--dropdown notes-->
+    <nav class="w3-modal w3-card-2" style="display:none" id="myDropnav">
+        <div class="w3-container"></div>
+        <div class="w3-row-padding w3-padding-bottom">
+            <div class="w3-row-padding">
+                <div class="w3-card-2 w3-white w3-round">
+                        <span onclick="w3_close()" class="w3-closebtn w3-xlarge w3-pink" title="Close Menu">&times;</span>
+                        <div class="w3-row-padding">
+                            <p><strong>How do I make a dashed line?</strong></p>
+                            <p>Change the dash line attribute. 4 should suffice. You may want to play with width and color for empahsis.</p>
+                            <pre>{strokeWidth: 3, strokeColor: '#1d3559', dash:4, straightFirst:false, straightLast:false,}</pre>
+                            <p><strong>Why can't I made a circle?</strong></p>
+                            <p>Cause a circle isn't a function, silly person.</p>
+                        </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+
+<!--sidenav
+<nav class="w3-sidenav w3-white w3-card-4" style="width:20%">
+  <a class="w3-hover-pink" href="#">Grid Style</a> 
+  <a class="w3-hover-pink" href="#">Line Style</a> 
+  <a class="w3-hover-pink" href="#">Create Function</a> 
+  <a class="w3-hover-pink" href="#">Create Point</a>
+  <a class="w3-hover-pink" href="#">Create Line from Points</a>
+  <a class="w3-hover-pink" href="#">Create Inequality from Points</a>
+</nav>-->
+
+<!-- Header -->
+<div class="w3-modal w3-card-2 w3-pink w3-center w3-padding-128" style="display:block" id="loading">
+    <h1 class="w3-lobster w3-jumbo">fancygraf</h1>
+    <p class="w3-large">Graphs so fancy, you'll say "Dang, those are some fancy graphs!"</p>
+    <div class="w3-row w3-center">
+        <img src="img/fancygrafBLACK.png" style="width:15%" class="w3-center logo" />
+    </div>
+    <button onclick="w3_start()" class="w3-btn w3-theme-d4 w3-round w3-hover-white w3-padding-16 w3-large w3-margin-top">Get Started</button>
+</div>
+
+    <div class="container" style="height:50px">
+    </div>
+    <div class="container" >
+        <div ng-controller="graphController as grphCtrl">
+            <div class="w3-row-padding">
+
+                <!--LEFT-->
+                <div class="w3-third">
+                    <!--Board Attributes-->
+                    <div class="w3-card-2 w3-white w3-round">
+                        <h4 class="w3-center w3-theme-d2" >Change Board Attributes</h4>
+                        <div class="w3-padding">
+                            <textarea ng-model="grphCtrl.boardAttributes" style="width: 100%; height: 80px">{boundingbox: [-10, 10, 10, -10], axis: true, grid: true, showcopyright: false, shownavigation: false, registerEvents: true, snapToGrid: true, snapSizeX: 1, snapSizeY: 1}</textarea>
+                        
+                            <button class="w3-btn w3-light-grey w3-round w3-hover-pink w3-margin-bottom" ng-click="grphCtrl.updateBoardAttributes()">Update Board Attributes</button>
+                        </div>
+                    </div>
+                    <br>
+
+                    <!--Line Attributes-->
+                    <div class="w3-card-2 w3-white w3-round">
+                        <h4 class="w3-center w3-theme-d2" >Change line attributes</h4>
+                        <div class="w3-padding">
+                            <em>Dark Blue  - #1d3559  Icy Blue - #4d8ff1</em>
+                            <textarea ng-model="grphCtrl.lineAttributes" style="width: 100%; height: 80px"></textarea>
+
+                            <!--Vertical Line-->
+                            <button class="w3-btn  w3-light-grey w3-round w3-hover-pink w3-margin-bottom" ng-click="grphCtrl.initializeBoard('verticalLineTest')">Add vertical line test</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!--MIDDLE-->
+                <div class="w3-third">
+                    <div class="w3-card-2 w3-white w3-round">
+                        <h4 class="w3-center w3-theme-d2" >Create a Function or Point</h4>
+                        <div class="w3-padding">
+                            <form>
+                                <p><strong>y = </strong>
+                                <textarea rows="1" style= "width:85%" ng-model="grphCtrl.functionForGraph" >val * 2</textarea><br /> <button class="w3-btn  w3-light-grey w3-round w3-hover-pink w3-margin-bottom" ng-click="grphCtrl.initializeBoard('function')">Add Function to Graph</button>
+                            </form>
+                            <div class="w3-row">
+                                <div class="w3-quarter"><em>x</em><br><input type="text" ng-model="grphCtrl.newPointX" size="4"></div>
+                                <div class="w3-quarter"><em>y</em><br><input type="text" ng-model="grphCtrl.newPointY" size="4"></div>
+                                <div class="w3-half"></div>
+                            </div>
+                            <button class="w3-btn  w3-light-grey w3-round w3-hover-pink w3-margin-bottom" ng-click="grphCtrl.initializeBoard('point')">Add Point to Graph</button>
+                        </div>
+                    </div>
+
+                    <!--Points to Lines-->
+                    <div class="w3-card-2 w3-white w3-round">
+                        <h4 class="w3-center w3-theme-d2" >Build Line or Inequality with Points</h4>
+                        <div class="w3-padding">
+                            <div class="row">
+                                <div class="w3-quarter"><em>x1</em><br><input type="text" ng-model="grphCtrl.x1" size="4"></div>
+                                <div class="w3-quarter"><em>y1</em><br><input type="text" ng-model="grphCtrl.y1" size="4"></div>
+                                <div class="w3-quarter"><em>x2</em><br><input type="text" ng-model="grphCtrl.x2" size="4"></div>
+                                <div class="w3-quarter"><em>y2</em><br><input type="text" ng-model="grphCtrl.y2" size="4"></div>
+                            </div>
+                            <button class="w3-btn  w3-light-grey w3-round w3-hover-pink w3-margin-bottom" ng-click="grphCtrl.initializeBoard('line')">Graph Line</button>
+                            <button class="w3-btn  w3-light-grey w3-round w3-hover-pink w3-margin-bottom" ng-click="grphCtrl.initializeBoard('inequality', true)">Greater Than</button>
+                            <button class="w3-btn  w3-light-grey w3-round w3-hover-pink w3-margin-bottom" ng-click="grphCtrl.initializeBoard('inequality', false)">Less Than</button>
+                        </div>
+                    </div>
+                </div>
+
+
+                <!--RIGHT-->
+                <div class="w3-third">
+                    
+                    <!--Canvas-->
+                    <div class="w3-card-2 w3-white w3-round">
+                        <h4 class="w3-center w3-theme-d2" >The Graph</h4>
+                        <div class="w3-padding w3-center">
+                            <canvas id="cvoutput"  width="300" height="300"></canvas><br />
+                            <div id="graphContainer" class="w3-invisible">
+                                <div id="box" class="jxgbox" style="display: hide; width:300px; height:300px; background-color: #f3f5f1;" jxg-board="grphCtrl.boardAttributes" jxg-callback="grphCtrl.cb"></div>
+                            </div>
+                            <button class="w3-btn-block  w3-light-grey w3-round w3-hover-red w3-margin-bottom" ng-click="grphCtrl.destroyBoard()">Destroy Board</button> 
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!--Bottom Notes-->
+            <div class="w3-row w3-center">
+                <img src="img/fancygrafGREY.png" style="width:7%" class="w3-center logo" />
+            </div>
+        </div>
+    </div>
+
+<script>
+function w3_open() {
+    document.getElementById("myDropnav").style.display = "block";
+}
+function w3_close() {
+    document.getElementById("myDropnav").style.display = "none";
+}
+function w3_start() {
+    document.getElementById("loading").style.display = "none";
+}
+</script>
+
+</body>
+
+
+</html>
+
