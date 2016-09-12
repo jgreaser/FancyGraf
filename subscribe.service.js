@@ -4,7 +4,6 @@ angular
 
 mailService.$inject = ['$http'];
 
-
 function mailService($http) {
   
     var subscribed = false;
@@ -17,9 +16,6 @@ function mailService($http) {
     return service;
 
     function subscribe(first, last, email) {
-
-        console.log("SUBSCRIBE - SERVICE");
-
         $http.get("https://reinvention.flvs.net/fancygraf/php/mailto.php?&first=" + first + "&last=" + last + "&email=" + email)
             .then(function(response) {
             console.log(response);
@@ -35,7 +31,4 @@ function mailService($http) {
     function getSubscribedStatus (){
         return subscribed;
     }
-
-
-  
 }

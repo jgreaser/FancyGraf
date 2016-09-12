@@ -17,21 +17,14 @@ function subscribeController($rootscope, $scope, $element,  $compile, mailServic
     vm.subscribe = subscribe;
 
     $scope.$watch(mailService.getSubscribedStatus, function(newValue, oldValue) {
-          console.log("subscibed changed!");
-          console.log("it is now " + newValue);
           vm.subscribed = mailService.getSubscribedStatus();
           vm.processing = false;
         });
 
-
-
     function subscribe (first, last, email){
 
         console.log("SUBSCRIBE! (controller)");
-vm.processing = true;
+        vm.processing = true;
         mailService.subscribe(first, last, email);
     }
-
-   
-    
 }

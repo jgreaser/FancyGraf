@@ -6,11 +6,12 @@ graphService.$inject = [];
 
 
 function graphService() {
-    console.log("Graph services");
     var vm = this;
     var isInitialized = false;
     vm.initNewGraph = false;
     vm.pointLabels = false;
+
+    //initial board attributes 
     var boardAttributes = {
         boundingbox: [-10, 10, 10, -10],
         axis: true,
@@ -22,6 +23,8 @@ function graphService() {
         snapSizeX: 1,
         snapSizeY: 1 
     };
+
+    //initial line attributes
     var lineAttributes = {
         strokeColor: '#404c69',
         highlightStrokeColor: '#111111',
@@ -38,7 +41,7 @@ function graphService() {
         margin: -15
     };
 
-    var pointsArray = [{
+   var pointsArray = [{
         name: 'A',
         x: 1,
         y: 1,
@@ -87,10 +90,7 @@ function graphService() {
         return pointsArray;
     }
 
-    function setPointsArray(pointsData) {
-
-   
-        
+  function setPointsArray(pointsData) {
 
         pointsArray = [{
             name: 'A',
@@ -127,10 +127,7 @@ function graphService() {
     }
 
     function randomNumber(min, max) {
-        console.log("random numbers, min, max: " + min + ", " + max)
-
         var ranNum = Math.floor(Math.random()*(max-min+1)+min);
-        console.log("random number is " + ranNum);
         return ranNum;
     }
     function getGraphType(){
@@ -162,14 +159,4 @@ function graphService() {
     function getLineAttributes() {
         return lineAttributes;
     }
-
-
-
-//labels are used with mathjax
-/*    function setPointLabels(val){
-        vm.pointLabels = val;
-    }
-    function getPointLabels(){
-        return vm.pointLabels;
-    }*/
 }
