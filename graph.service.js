@@ -4,7 +4,6 @@ angular
 
 graphService.$inject = [];
 
-
 function graphService() {
     var vm = this;
     var isInitialized = false;
@@ -31,8 +30,8 @@ function graphService() {
         strokeColorOpacity: 1,
         dash: 0,
         strokeWidth: 2,
-        straightFirst: true,
-        straightLast: true,
+        straightFirst: false,
+        straightLast: false,
         firstArrow: false,
         lastArrow: false,
         trace: false,

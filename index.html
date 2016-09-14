@@ -97,7 +97,16 @@
                             <hr>
                             <h2 class="w3-dosis"><strong>Why can't I made a circle?</strong></h2>
                             <p>Cause a circle isn't a function, silly person.</p>
+                            <hr>
+                            <h2 class="w3-dosis"><strong>How do I setup the axis/grid for box plots? </strong></h2>
+                            <p>Thusly: <br /><img src="img/boxplot.jpg"/></p>
+                            <p>And set the X Max to something a bit higher than your maximum data point.</p>
                         </div>
+
+
+
+
+                        
                 </div>
             </div>
         </div>
@@ -272,6 +281,19 @@
                                         </div>
                                     </div>  
                                 </form>
+                                <hr />
+                                 <form>
+                                    <div class="w3-row">
+                                        <div class="w3-half">
+                                            <input class="w3-radio" type="radio" value="true" ng-model="grphCtrl.axisShow" checked>
+                                            <label class="w3-validate">Show Axis</label>
+                                        </div>
+                                        <div class="w3-half">
+                                            <input class="w3-radio" type="radio" value="false" ng-model="grphCtrl.axisShow">
+                                            <label class="w3-validate">Hide Axis</label>
+                                        </div>
+                                    </div>  
+                                </form>
                             </div>                    
                             <button class="w3-btn-block w3-light-grey w3-round w3-hover-pink w3-margin-bottom" ng-click="grphCtrl.updateBoardAttributes()">Update Board Attributes</button>
                         </div>
@@ -314,6 +336,28 @@
                 <!--MIDDLE-->
                 <div class="w3-third">
                     <h2 class="w3-lobster w3-pink w3-padding-left w3-large">Graph it</h2>
+
+                <!--Box and Whiskers-->
+                    <div class="w3-card-2 w3-white w3-round">
+                        <h4 class="w3-center w3-theme-d2" >Build Box and Whisker Plot</h4>
+                        <div class="w3-padding">
+                            <div class="row">
+                                <div class=""><em>Minimum</em> <input type="text" ng-model="grphCtrl.boxPlotMin" size="4"></div>
+                                <div class=""><em>Q<sub>1</sub></em> <input type="text" ng-model="grphCtrl.boxPlotQ1" size="4"></div>
+                                <div class=""><em>Median</em> <input type="text" ng-model="grphCtrl.boxPlotMed" size="4"></div>
+                                <div class=""><em>Q<sub>3</sub></em> <input type="text" ng-model="grphCtrl.boxPlotQ3" size="4"></div>
+                                <div class=""><em>Maximum</em> <input type="text" ng-model="grphCtrl.boxPlotMax" size="4"></div>
+                                 <div class=""><em>Box Height</em> <input type="text" ng-model="grphCtrl.boxPlotHeight" size="4"></div>
+                                 <div class=""><em>Box Offset</em> <input type="text" ng-model="grphCtrl.boxPlotOffset" size="4"></div>
+                            </div>
+                            <button class="w3-btn  w3-light-grey w3-round w3-hover-pink w3-margin-bottom" ng-click="grphCtrl.initializeBoard('boxPlot')">Graph Plot</button>
+                           
+                        </div>
+                    </div>
+
+
+                    <!--Function/Point-->
+
                     <div class="w3-card-2 w3-white w3-round">
                         <h4 class="w3-center w3-theme-d2" >Create a Function or Point</h4>
                         <div class="w3-padding">
@@ -346,6 +390,9 @@
                             <button class="w3-btn  w3-light-grey w3-round w3-hover-pink w3-margin-bottom" ng-click="grphCtrl.initializeBoard('inequality', false)">Less Than</button>
                         </div>
                     </div>
+
+                    
+
                 </div>
 
 

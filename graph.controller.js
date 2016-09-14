@@ -20,7 +20,6 @@ function graphController($rootscope, $scope, $element, $compile, graphService, m
     vm.destroyBoard = destroyBoard;
     vm.initializeBoard = initializeBoard;
 
-
     vm.boardAttributes = "{        boundingbox: [-10, 10, 10, -10],        axis: true,        grid: true,        showcopyright: false,        shownavigation: false,        registerEvents: true,        snapToGrid: true,        snapSizeX: 1,        snapSizeY: 1     }";
 
     vm.updateBoardAttributes = updateBoardAttributes;
@@ -48,10 +47,20 @@ function graphController($rootscope, $scope, $element, $compile, graphService, m
     vm.newPointX = 0;
     vm.newPointY = 0;
 
+    //initialize 5 data points for box plots
+    vm.boxPlotMin = 0;
+    vm.boxPlotQ1 = 1;
+    vm.boxPlotMed = 2;
+    vm.boxPlotQ3 = 3;
+    vm.boxPlotMax = 4;
+    vm.boxPlotHeight = 4;
+    vm.boxPlotOffset = 5;
+
     //setting some line/grid attributes
     vm.lineColor = "#1d3559";
     vm.lineDash = "0";
     vm.gridShow = "true";
+    vm.axisShow = true;
     vm.lineAttributes = "{strokeColor: '#1d3559', highlightStrokeColor: '#111111',strokeColorOpacity: 1,dash: 0,        strokeWidth: 2,        straightFirst: true,        straightLast: true,        firstArrow: false,        lastArrow: false,        trace: false,        shadow: false,        visible: true,        margin: -15}";
     vm.board = JXG.JSXGraph.initBoard('box', {
         boundingbox: [-10, 10, 10, -10],
@@ -64,9 +73,6 @@ function graphController($rootscope, $scope, $element, $compile, graphService, m
         snapSizeX: 1,
         snapSizeY: 1
     });
-    
-
-
 
     //if graphService.getInitNewGraph changes and is true, and graphService.initialized() is initialized, 
     //then reset the board
@@ -82,12 +88,6 @@ function graphController($rootscope, $scope, $element, $compile, graphService, m
     }, true);
 
     vm.cb = cb;
-
-
-
-
-   
-
 
     function initializeBoard(typeOfGraphObject, val) {
         cb(vm.board, typeOfGraphObject, val);
@@ -151,10 +151,45 @@ function graphController($rootscope, $scope, $element, $compile, graphService, m
                 visible: true,
                 margin: -15
             });
+        }
+
+        if (typeOfGraphObject == "boxPlot") {
+            console.log("box plot!");
+
+            lineAttr.straightFirst = false;
+            lineAttr.straightLast = false;
+
+
+            console.log("vm.boxPlotMin is " + vm.boxPlotMin);
+            console.log("vm.boxPlotQ1 is " + vm.boxPlotQ1);
+            console.log("vm.boxPlotMed is " + vm.boxPlotMed);           
+            console.log("vm.boxPlotQ3 is " + vm.boxPlotQ3);
+            console.log("vm.boxPlotMax is " + vm.boxPlotMax);
+            console.log("vm.boxPlotHeight is " + vm.boxPlotHeight);           
+            console.log("vm.boxPlotOffset is " + vm.boxPlotOffset);
+
+
+
+            //create min-Q1 line
+            board.create('line', [[vm.boxPlotMin,vm.boxPlotOffset], [vm.boxPlotQ1,vm.boxPlotOffset]], lineAttr);
+            //create Q1-Med box
+            board.create('line', [[vm.boxPlotQ1, vm.boxPlotOffset-2], [vm.boxPlotQ1,vm.boxPlotOffset+2]], lineAttr);
+            board.create('line', [[vm.boxPlotQ1,vm.boxPlotOffset+2], [vm.boxPlotMed,vm.boxPlotOffset+2]], lineAttr);
+            board.create('line', [[vm.boxPlotQ1,vm.boxPlotOffset-2], [vm.boxPlotMed,vm.boxPlotOffset-2]], lineAttr);
+            board.create('line', [[vm.boxPlotMed,vm.boxPlotOffset-2], [vm.boxPlotMed,vm.boxPlotOffset+2]], lineAttr);
+           //create Med-Q3 box
+            board.create('line', [[vm.boxPlotMed,vm.boxPlotOffset-2], [vm.boxPlotMed,vm.boxPlotOffset+2]], lineAttr);
+            board.create('line', [[vm.boxPlotMed,vm.boxPlotOffset+2], [vm.boxPlotQ3,vm.boxPlotOffset+2]], lineAttr);
+            board.create('line', [[vm.boxPlotMed,vm.boxPlotOffset-2], [vm.boxPlotQ3,vm.boxPlotOffset-2]], lineAttr);
+            board.create('line', [[vm.boxPlotQ3,vm.boxPlotOffset-2], [vm.boxPlotQ3,vm.boxPlotOffset+2]], lineAttr);
+            //create Q3-max line
+            board.create('line', [[vm.boxPlotQ3,vm.boxPlotOffset], [vm.boxPlotMax,vm.boxPlotOffset]], lineAttr);
+      
 
 
 
         }
+
 
         vm.dumpToCanvas();
 
@@ -177,7 +212,7 @@ function graphController($rootscope, $scope, $element, $compile, graphService, m
 
     function updateBoardAttributes() {
 
-        eval("var boardAttr = {boundingbox: [" + vm.xmin + ", " + vm.ymax + ", " + vm.xmax + ", " + vm.ymin + "], axis: true, grid: " + vm.gridShow + ", showcopyright: false, shownavigation: false, registerEvents: true, snapToGrid: true, snapSizeX: 1, snapSizeY: 1 };");
+        eval("var boardAttr = {boundingbox: [" + vm.xmin + ", " + vm.ymax + ", " + vm.xmax + ", " + vm.ymin + "], axis: " + vm.axisShow + ", grid: " + vm.gridShow + ", showcopyright: false, shownavigation: false, registerEvents: true, snapToGrid: true, snapSizeX: 1, snapSizeY: 1 };");
 
 
         JXG.JSXGraph.freeBoard(vm.board);
