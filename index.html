@@ -69,6 +69,7 @@
     .w3-invisible {
         display: none;
     }
+
 </style>
 
 <body ng-app="app" >
@@ -295,7 +296,7 @@
                                     </div>  
                                 </form>
                             </div>                    
-                            <button class="w3-btn-block w3-light-grey w3-round w3-hover-pink w3-margin-bottom" ng-click="grphCtrl.updateBoardAttributes()">Update Board Attributes</button>
+                            <button class="w3-btn-block w3-light-grey w3-round w3-hover-pink w3-margin-bottom" ng-click="grphCtrl.updateBoardAttributes('default')">Update Board Attributes</button>
                         </div>
                     </div>
                     <!--Line Attributes-->
@@ -339,18 +340,24 @@
 
                 <!--Box and Whiskers-->
                     <div class="w3-card-2 w3-white w3-round">
-                        <h4 class="w3-center w3-theme-d2" >Build Box and Whisker Plot</h4>
-                        <div class="w3-padding">
+                        <h4 class="w3-center w3-theme-d2" ng-click="grphCtrl.showDiv = !grphCtrl.showDiv">Statistics ^</h4>
+                        <div class="w3-padding" id="boxPlot" ng-show="grphCtrl.showDiv">
+
+
                             <div class="row">
-                                <div class=""><em>Minimum</em> <input type="text" ng-model="grphCtrl.boxPlotMin" size="4"></div>
-                                <div class=""><em>Q<sub>1</sub></em> <input type="text" ng-model="grphCtrl.boxPlotQ1" size="4"></div>
-                                <div class=""><em>Median</em> <input type="text" ng-model="grphCtrl.boxPlotMed" size="4"></div>
-                                <div class=""><em>Q<sub>3</sub></em> <input type="text" ng-model="grphCtrl.boxPlotQ3" size="4"></div>
-                                <div class=""><em>Maximum</em> <input type="text" ng-model="grphCtrl.boxPlotMax" size="4"></div>
-                                 <div class=""><em>Box Height</em> <input type="text" ng-model="grphCtrl.boxPlotHeight" size="4"></div>
-                                 <div class=""><em>Box Offset</em> <input type="text" ng-model="grphCtrl.boxPlotOffset" size="4"></div>
+                                <div class=""><input type="text" ng-model="grphCtrl.boxPlotMin" size="4"> <em>Minimum</em> </div>
+                                <div class=""><input type="text" ng-model="grphCtrl.boxPlotQ1" size="4"> <em>Q<sub>1</sub></em> </div>
+                                <div class=""><input type="text" ng-model="grphCtrl.boxPlotMed" size="4"> <em>Median</em> </div>
+                                <div class=""> <input type="text" ng-model="grphCtrl.boxPlotQ3" size="4"> <em>Q<sub>3</sub></em></div>
+                                <div class=""> <input type="text" ng-model="grphCtrl.boxPlotMax" size="4"> <em>Maximum</em></div>
+                                 <div class=""> <input type="text" ng-model="grphCtrl.boxPlotHeight" size="4"> <em>Box Height</em> (under construction)</div>
+                                 <div class=""><input type="text" ng-model="grphCtrl.boxPlotOffset" size="4"> <em>Box Offset</em> </div>
                             </div>
-                            <button class="w3-btn  w3-light-grey w3-round w3-hover-pink w3-margin-bottom" ng-click="grphCtrl.initializeBoard('boxPlot')">Graph Plot</button>
+                             <button class="w3-btn-block w3-light-grey w3-round w3-hover-pink w3-margin-bottom" ng-click="grphCtrl.updateBoardAttributes('boxPlot')">Build Boxplot Board</button>
+                             <div class=""><em>Histogram Data</em><br />
+                              <input type="text" ng-model="grphCtrl.barChartData" size="20"> </div>
+                              <button class="w3-btn-block w3-light-grey w3-round w3-hover-pink w3-margin-bottom" ng-click="grphCtrl.updateBoardAttributes('barChart')">Build Histogram</button>
+                           
                            
                         </div>
                     </div>
@@ -364,6 +371,7 @@
                             <form>
                                 <p><strong>y = </strong>
                                 <textarea rows="1" style= "width:85%" ng-model="grphCtrl.functionForGraph" >val * 2</textarea><br /> <button class="w3-btn-block w3-light-grey w3-round w3-hover-pink w3-margin-bottom" ng-click="grphCtrl.initializeBoard('function')">Add Function to Graph</button>
+
                             </form>
                             <div class="w3-row w3-center">
                                 <div class="w3-quarter w3-container"></div>
@@ -406,7 +414,8 @@
                         <div class="w3-padding w3-center">
                             <!--Vertical Line-->
                             <button class="w3-btn-block  w3-light-grey w3-round w3-hover-pink w3-margin-bottom" ng-click="grphCtrl.initializeBoard('verticalLineTest')">Add vertical line test</button>
-                            <canvas id="cvoutput"  width="300" height="300"></canvas><br />
+
+                            <canvas id="cvoutput"  width="300" height="300" style="margin-top: 20px"></canvas><br />
                       
                             <div id="graphContainer" class="">
 

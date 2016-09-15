@@ -24,6 +24,8 @@ function graphController($rootscope, $scope, $element, $compile, graphService, m
 
     vm.updateBoardAttributes = updateBoardAttributes;
 
+    vm.toggleView = toggleView;
+
     vm.pointsArray = getPointsArray;
 
     vm.graphObject = {
@@ -56,6 +58,9 @@ function graphController($rootscope, $scope, $element, $compile, graphService, m
     vm.boxPlotHeight = 4;
     vm.boxPlotOffset = 5;
 
+    //barchart data
+    vm.barChartData = '5,1,5,1,5';
+
     //setting some line/grid attributes
     vm.lineColor = "#1d3559";
     vm.lineDash = "0";
@@ -73,6 +78,15 @@ function graphController($rootscope, $scope, $element, $compile, graphService, m
         snapSizeX: 1,
         snapSizeY: 1
     });
+
+
+    //handling view stuff
+    function toggleView(divId){
+        //$('#'+divId+'').hide();
+
+    }
+
+
 
     //if graphService.getInitNewGraph changes and is true, and graphService.initialized() is initialized, 
     //then reset the board
@@ -159,16 +173,9 @@ function graphController($rootscope, $scope, $element, $compile, graphService, m
             lineAttr.straightFirst = false;
             lineAttr.straightLast = false;
 
+            var boxPlotAxis = board.create('axis', [[vm.boxPlotMin,0], [vm.boxPlotQ1,0]]);
 
-            console.log("vm.boxPlotMin is " + vm.boxPlotMin);
-            console.log("vm.boxPlotQ1 is " + vm.boxPlotQ1);
-            console.log("vm.boxPlotMed is " + vm.boxPlotMed);           
-            console.log("vm.boxPlotQ3 is " + vm.boxPlotQ3);
-            console.log("vm.boxPlotMax is " + vm.boxPlotMax);
-            console.log("vm.boxPlotHeight is " + vm.boxPlotHeight);           
-            console.log("vm.boxPlotOffset is " + vm.boxPlotOffset);
-
-
+            board.create('ticks', [boxPlotAxis, [vm.boxPlotMin, vm.boxPlotQ1, vm.boxPlotMed, vm.boxPlotQ3,vm.boxPlotMax]], {strokeColor: '#00ff00', majorHeight: 15, drawLabels: true});
 
             //create min-Q1 line
             board.create('line', [[vm.boxPlotMin,vm.boxPlotOffset], [vm.boxPlotQ1,vm.boxPlotOffset]], lineAttr);
@@ -186,6 +193,26 @@ function graphController($rootscope, $scope, $element, $compile, graphService, m
             board.create('line', [[vm.boxPlotQ3,vm.boxPlotOffset], [vm.boxPlotMax,vm.boxPlotOffset]], lineAttr);
       
 
+
+
+        }
+
+        if (typeOfGraphObject == 'barChart'){
+
+            var barChartXAxis = board.create('axis', [[0,0], [0,10000]]);
+            var barChartYAxis = board.create('axis', [[0,0], [10000,0]]);
+
+            eval("var data = [" + vm.barChartData + "]");
+
+            var colorsArray = [];
+
+            angular.forEach(data, function(value) {
+                     colorsArray.push('#ff9900');
+                });
+
+            console.log(colorsArray);
+
+            board.create('chart', data, {chartStyle:'bar',width:-1,labels:data, colorArray: colorsArray});
 
 
         }
@@ -209,18 +236,49 @@ function graphController($rootscope, $scope, $element, $compile, graphService, m
 
     }
 
+    function getGridMax(val){
+        return (vm.boxPlotMax + vm.boxPlotMax*.1);
+    }
 
-    function updateBoardAttributes() {
 
+    function updateBoardAttributes(typeOfGraph) {
+
+        if (typeOfGraph == 'default'){
         eval("var boardAttr = {boundingbox: [" + vm.xmin + ", " + vm.ymax + ", " + vm.xmax + ", " + vm.ymin + "], axis: " + vm.axisShow + ", grid: " + vm.gridShow + ", showcopyright: false, shownavigation: false, registerEvents: true, snapToGrid: true, snapSizeX: 1, snapSizeY: 1 };");
+        }
+        else if (typeOfGraph == 'boxPlot'){
+        eval("var boardAttr = {boundingbox: ["+(0-(vm.boxPlotMax*.1))+", 10, " + getGridMax(vm.boxPlotMax) +  ", -3], axis: false, grid: false, showcopyright: false, shownavigation: false, registerEvents: true, snapToGrid: true, snapSizeX: 1, snapSizeY: 1 };");
+        }
+         else if (typeOfGraph == 'barChart'){
+            eval("var data = [" + vm.barChartData + "]");
+            var maxX = getMaxData(data);
 
+            eval("var boardAttr = {boundingbox: ["+(0-1)+", "+(maxX+(maxX*.2))+", " + (data.length+data.length*.2) +  ", " +  (0-(maxX*.2))  + "], axis: false, grid: false, showcopyright: false, shownavigation: false, registerEvents: true, snapToGrid: true, snapSizeX: 1, snapSizeY: 1 };");
+        }
 
         JXG.JSXGraph.freeBoard(vm.board);
 
         vm.board = JXG.JSXGraph.initBoard('box', boardAttr);
         vm.dumpToCanvas();
+
+        if (typeOfGraph == 'boxPlot'){
+        cb(vm.board, 'boxPlot');
+        }
+        else if (typeOfGraph == 'barChart'){
+        cb(vm.board, 'barChart');
+        }
+
     }
 
+    function getMaxData(data){
+        var maxData = 0;
+        angular.forEach(data, function(value) {
+            if (value > maxData){
+                maxData = value;
+            }
+        });
+        return maxData;
+    }
 
     function getPointsArray() {
         return graphService.getPointsArray();
@@ -263,6 +321,9 @@ function graphController($rootscope, $scope, $element, $compile, graphService, m
         //vm.board.createElement('line', [points[0], points[1]], {strokeColor:'#f21d67',strokeWidth:2});
 
     }
+
+   
+
 
     function createParabola(direction) {
 
