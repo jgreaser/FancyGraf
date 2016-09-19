@@ -10,6 +10,9 @@ function graphController($rootscope, $scope, $element, $compile, graphService, m
     vm.hide = false;
     vm.board = {};
 
+    vm.altAttr = '';
+    vm.dataSet = '';
+
     vm.functionForGraph = 'x * 2';
 
     //initializing functions
@@ -61,6 +64,11 @@ function graphController($rootscope, $scope, $element, $compile, graphService, m
     //barchart data
     vm.barChartData = '5,1,5,1,5';
 
+    //dotPlot data
+    vm.dotPlotData = "[[1,2],[3,4]]";
+    vm.dotPlotMin = 0;
+    vm.dotPlotMax = 10;
+
     //setting some line/grid attributes
     vm.lineColor = "#1d3559";
     vm.lineDash = "0";
@@ -80,8 +88,10 @@ function graphController($rootscope, $scope, $element, $compile, graphService, m
     });
 
 
+    //one JSON to rule them all, and in the darkness bind them
+
     //handling view stuff
-    function toggleView(divId){
+    function toggleView(divId) {
         //$('#'+divId+'').hide();
 
     }
@@ -114,9 +124,11 @@ function graphController($rootscope, $scope, $element, $compile, graphService, m
         eval("var fn = function(x){ return " + vm.functionForGraph + ";}");
         eval("var points = [[" + vm.x1 + "," + vm.y1 + "],[" + vm.x2 + ", " + vm.y2 + "]];");
         eval("var lineAttr = {strokeColor: '" + vm.lineColor + "', highlightStrokeColor: '#111111',strokeColorOpacity: 1,dash: " + vm.lineDash + ",        strokeWidth: 2,        straightFirst: true,        straightLast: true,        firstArrow: false,        lastArrow: false,        trace: false,        shadow: false,        visible: true,        margin: -15};");
-       
+
         var newPoint = [vm.newPointX, vm.newPointY];
 
+        vm.altAttr = '';
+        vm.dataSet = '';
         //If a graph object is a certain type, do that thing
 
         if (typeOfGraphObject == "function") {
@@ -143,6 +155,73 @@ function graphController($rootscope, $scope, $element, $compile, graphService, m
                 fillColor: '#f21d67',
                 name: '(' + vm.newPointX + ',' + vm.newPointY + ')'
             });
+
+
+
+
+        }
+
+
+        // dotPlotData = [[1,2],[3,4]];
+        if (typeOfGraphObject == "dotPlot") {
+            //console.log("dotplot!");
+            eval("var data = [" + vm.dotPlotData + "]");
+            //console.log(data);    
+            console.log("ALT IS");
+            angular.forEach(data[0], function(value) {
+                vm.altAttr += "There are " + value[1] + " points above " + value[0] + ". ";
+            });
+            console.log(vm.altAttr);
+
+
+
+
+            angular.forEach(data[0], function(value) {
+                for (i = 0; i < value[1]; i++) {
+                    vm.dataSet += value[0] + ", ";
+                }
+
+            });
+            vm.dataSet = vm.dataSet.slice(0, vm.dataSet.length - 2);
+
+            var maxNum = 0;
+            var maxXVal = 0;
+            angular.forEach(data[0], function(value) {
+
+                console.log("value is " + value[0]);
+                if (value[0] > maxXVal) {
+                    maxXVal = value[0]
+                }
+            });
+
+
+            var dotPlotAxis = board.create('axis', [
+                [vm.dotPlotMin, 0],
+                [maxXVal, 0]
+            ]);
+
+            board.create('ticks', [dotPlotAxis], {
+                insertTicks: false,
+                strokeColor: '#333333',
+                majorHeight: 15,
+                drawLabels: true
+            });
+
+            angular.forEach(data[0], function(value) {
+                //  console.log("value is ");
+                // console.log(value[0]);
+
+                for (i = 0; i < value[1]; i++) {
+                    //console.log(value[0] + " " + i);
+                    board.create('point', [value[0], i], {
+                        fillColor: '#f21d67'
+
+                    });
+                }
+            });
+
+
+
         }
 
         if (typeOfGraphObject == "inequality") {
@@ -173,50 +252,99 @@ function graphController($rootscope, $scope, $element, $compile, graphService, m
             lineAttr.straightFirst = false;
             lineAttr.straightLast = false;
 
-            var boxPlotAxis = board.create('axis', [[vm.boxPlotMin,0], [vm.boxPlotQ1,0]]);
+            var boxPlotAxis = board.create('axis', [
+                [vm.boxPlotMin, 0],
+                [vm.boxPlotQ1, 0]
+            ]);
 
-            board.create('ticks', [boxPlotAxis, [vm.boxPlotMin, vm.boxPlotQ1, vm.boxPlotMed, vm.boxPlotQ3,vm.boxPlotMax]], {strokeColor: '#00ff00', majorHeight: 15, drawLabels: true});
+            board.create('ticks', [boxPlotAxis, [vm.boxPlotMin, vm.boxPlotQ1, vm.boxPlotMed, vm.boxPlotQ3, vm.boxPlotMax]], {
+                strokeColor: '#00ff00',
+                majorHeight: 15,
+                drawLabels: true
+            });
 
             //create min-Q1 line
-            board.create('line', [[vm.boxPlotMin,vm.boxPlotOffset], [vm.boxPlotQ1,vm.boxPlotOffset]], lineAttr);
+            board.create('line', [
+                [vm.boxPlotMin, vm.boxPlotOffset],
+                [vm.boxPlotQ1, vm.boxPlotOffset]
+            ], lineAttr);
             //create Q1-Med box
-            board.create('line', [[vm.boxPlotQ1, vm.boxPlotOffset-2], [vm.boxPlotQ1,vm.boxPlotOffset+2]], lineAttr);
-            board.create('line', [[vm.boxPlotQ1,vm.boxPlotOffset+2], [vm.boxPlotMed,vm.boxPlotOffset+2]], lineAttr);
-            board.create('line', [[vm.boxPlotQ1,vm.boxPlotOffset-2], [vm.boxPlotMed,vm.boxPlotOffset-2]], lineAttr);
-            board.create('line', [[vm.boxPlotMed,vm.boxPlotOffset-2], [vm.boxPlotMed,vm.boxPlotOffset+2]], lineAttr);
-           //create Med-Q3 box
-            board.create('line', [[vm.boxPlotMed,vm.boxPlotOffset-2], [vm.boxPlotMed,vm.boxPlotOffset+2]], lineAttr);
-            board.create('line', [[vm.boxPlotMed,vm.boxPlotOffset+2], [vm.boxPlotQ3,vm.boxPlotOffset+2]], lineAttr);
-            board.create('line', [[vm.boxPlotMed,vm.boxPlotOffset-2], [vm.boxPlotQ3,vm.boxPlotOffset-2]], lineAttr);
-            board.create('line', [[vm.boxPlotQ3,vm.boxPlotOffset-2], [vm.boxPlotQ3,vm.boxPlotOffset+2]], lineAttr);
+            board.create('line', [
+                [vm.boxPlotQ1, vm.boxPlotOffset - 2],
+                [vm.boxPlotQ1, vm.boxPlotOffset + 2]
+            ], lineAttr);
+            board.create('line', [
+                [vm.boxPlotQ1, vm.boxPlotOffset + 2],
+                [vm.boxPlotMed, vm.boxPlotOffset + 2]
+            ], lineAttr);
+            board.create('line', [
+                [vm.boxPlotQ1, vm.boxPlotOffset - 2],
+                [vm.boxPlotMed, vm.boxPlotOffset - 2]
+            ], lineAttr);
+            board.create('line', [
+                [vm.boxPlotMed, vm.boxPlotOffset - 2],
+                [vm.boxPlotMed, vm.boxPlotOffset + 2]
+            ], lineAttr);
+            //create Med-Q3 box
+            board.create('line', [
+                [vm.boxPlotMed, vm.boxPlotOffset - 2],
+                [vm.boxPlotMed, vm.boxPlotOffset + 2]
+            ], lineAttr);
+            board.create('line', [
+                [vm.boxPlotMed, vm.boxPlotOffset + 2],
+                [vm.boxPlotQ3, vm.boxPlotOffset + 2]
+            ], lineAttr);
+            board.create('line', [
+                [vm.boxPlotMed, vm.boxPlotOffset - 2],
+                [vm.boxPlotQ3, vm.boxPlotOffset - 2]
+            ], lineAttr);
+            board.create('line', [
+                [vm.boxPlotQ3, vm.boxPlotOffset - 2],
+                [vm.boxPlotQ3, vm.boxPlotOffset + 2]
+            ], lineAttr);
             //create Q3-max line
-            board.create('line', [[vm.boxPlotQ3,vm.boxPlotOffset], [vm.boxPlotMax,vm.boxPlotOffset]], lineAttr);
-      
+            board.create('line', [
+                [vm.boxPlotQ3, vm.boxPlotOffset],
+                [vm.boxPlotMax, vm.boxPlotOffset]
+            ], lineAttr);
+
 
 
 
         }
 
-        if (typeOfGraphObject == 'barChart'){
+        if (typeOfGraphObject == 'barChart') {
 
-            var barChartXAxis = board.create('axis', [[0,0], [0,10000]]);
-            var barChartYAxis = board.create('axis', [[0,0], [10000,0]]);
+            var barChartXAxis = board.create('axis', [
+                [0, 0],
+                [0, 10000]
+            ]);
+            var barChartYAxis = board.create('axis', [
+                [0, 0],
+                [10000, 0]
+            ]);
 
             eval("var data = [" + vm.barChartData + "]");
 
             var colorsArray = [];
 
             angular.forEach(data, function(value) {
-                     colorsArray.push('#ff9900');
-                });
+                colorsArray.push('#ff9900');
+            });
 
             console.log(colorsArray);
 
-            board.create('chart', data, {chartStyle:'bar',width:-1,labels:data, colorArray: colorsArray});
+            board.create('chart', data, {
+                chartStyle: 'bar',
+                width: -1,
+                labels: data,
+                colorArray: colorsArray
+            });
 
 
         }
 
+        //put a JSON build right here
 
         vm.dumpToCanvas();
 
@@ -236,24 +364,51 @@ function graphController($rootscope, $scope, $element, $compile, graphService, m
 
     }
 
-    function getGridMax(val){
-        return (vm.boxPlotMax + vm.boxPlotMax*.1);
+    function getGridMax(val) {
+        console.log("getGridMax");
+        console.log("val is " + (val + (val * 0.2)));
+
+        return (val + (val * 0.2));
     }
 
 
     function updateBoardAttributes(typeOfGraph) {
 
-        if (typeOfGraph == 'default'){
-        eval("var boardAttr = {boundingbox: [" + vm.xmin + ", " + vm.ymax + ", " + vm.xmax + ", " + vm.ymin + "], axis: " + vm.axisShow + ", grid: " + vm.gridShow + ", showcopyright: false, shownavigation: false, registerEvents: true, snapToGrid: true, snapSizeX: 1, snapSizeY: 1 };");
-        }
-        else if (typeOfGraph == 'boxPlot'){
-        eval("var boardAttr = {boundingbox: ["+(0-(vm.boxPlotMax*.1))+", 10, " + getGridMax(vm.boxPlotMax) +  ", -3], axis: false, grid: false, showcopyright: false, shownavigation: false, registerEvents: true, snapToGrid: true, snapSizeX: 1, snapSizeY: 1 };");
-        }
-         else if (typeOfGraph == 'barChart'){
+        if (typeOfGraph == 'default') {
+            eval("var boardAttr = {boundingbox: [" + vm.xmin + ", " + vm.ymax + ", " + vm.xmax + ", " + vm.ymin + "], axis: " + vm.axisShow + ", grid: " + vm.gridShow + ", showcopyright: false, shownavigation: false, registerEvents: true, snapToGrid: true, snapSizeX: 1, snapSizeY: 1 };");
+        } else if (typeOfGraph == 'boxPlot') {
+
+
+
+            eval("var boardAttr = {boundingbox: [" + (vm.boxPlotMin - (vm.boxPlotMax * 0.2)) + ", 10, " + getGridMax(parseInt(vm.boxPlotMax)) + ", -3], axis: false, grid: false, showcopyright: false, shownavigation: false, registerEvents: true, snapToGrid: true, snapSizeX: 1, snapSizeY: 1 };");
+        } else if (typeOfGraph == 'dotPlot') {
+            eval("var data = [" + vm.dotPlotData + "]");
+            var maxNum = 0;
+            var maxXVal = 0;
+            angular.forEach(data[0], function(value) {
+
+                console.log("value is " + value[0]);
+                if (value[0] > maxXVal) {
+                    maxXVal = value[0]
+                }
+
+                for (i = 0; i < value[1]; i++) {
+                    //console.log(value[0] + " " + i);
+                    if (i > maxNum) {
+                        maxNum = i;
+                    }
+                }
+            });
+            console.log("maxNum is " + maxNum);
+            //getGridMax(parseInt(maxNum))
+            //eval("var boardAttr = {boundingbox: ["+(vm.dotPlotMin-(maxNum*0.2))+", "+getGridMax(parseInt(maxXVal))+", " + getGridMax(parseInt(maxNum)) +  ", -3], axis: false, grid: false, showcopyright: false, shownavigation: false, registerEvents: true, snapToGrid: true, snapSizeX: 1, snapSizeY: 1 };");
+
+            eval("var boardAttr = {boundingbox: [" + (vm.dotPlotMin - (maxNum * 0.2)) + ", " + getGridMax(parseInt(maxNum)) + ", " + getGridMax(parseInt(maxXVal)) + ", -3], axis: false, grid: false, showcopyright: false, shownavigation: false, registerEvents: true, snapToGrid: true, snapSizeX: 1, snapSizeY: 1 };");
+        } else if (typeOfGraph == 'barChart') {
             eval("var data = [" + vm.barChartData + "]");
             var maxX = getMaxData(data);
 
-            eval("var boardAttr = {boundingbox: ["+(0-1)+", "+(maxX+(maxX*.2))+", " + (data.length+data.length*.2) +  ", " +  (0-(maxX*.2))  + "], axis: false, grid: false, showcopyright: false, shownavigation: false, registerEvents: true, snapToGrid: true, snapSizeX: 1, snapSizeY: 1 };");
+            eval("var boardAttr = {boundingbox: [" + (0 - 1) + ", " + (maxX + (maxX * 0.2)) + ", " + (data.length + data.length * 0.2) + ", " + (0 - (maxX * 0.2)) + "], axis: false, grid: false, showcopyright: false, shownavigation: false, registerEvents: true, snapToGrid: true, snapSizeX: 1, snapSizeY: 1 };");
         }
 
         JXG.JSXGraph.freeBoard(vm.board);
@@ -261,19 +416,19 @@ function graphController($rootscope, $scope, $element, $compile, graphService, m
         vm.board = JXG.JSXGraph.initBoard('box', boardAttr);
         vm.dumpToCanvas();
 
-        if (typeOfGraph == 'boxPlot'){
-        cb(vm.board, 'boxPlot');
+        if (typeOfGraph == 'boxPlot') {
+            cb(vm.board, 'boxPlot');
+        } else if (typeOfGraph == 'barChart') {
+            cb(vm.board, 'barChart');
+        } else if (typeOfGraph == 'dotPlot') {
+            cb(vm.board, 'dotPlot');
         }
-        else if (typeOfGraph == 'barChart'){
-        cb(vm.board, 'barChart');
-        }
-
     }
 
-    function getMaxData(data){
+    function getMaxData(data) {
         var maxData = 0;
         angular.forEach(data, function(value) {
-            if (value > maxData){
+            if (value > maxData) {
                 maxData = value;
             }
         });
@@ -322,7 +477,7 @@ function graphController($rootscope, $scope, $element, $compile, graphService, m
 
     }
 
-   
+
 
 
     function createParabola(direction) {

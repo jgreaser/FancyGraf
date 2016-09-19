@@ -55,66 +55,69 @@
         margin-left: 5px;
         font-family: 'Lobster';
     }
-
+    
     h4 {
         font-family: 'Dosis';
     }
-
+    
     .w3-lobster {
         font-family: 'Lobster', serif;
     }
+    
     .w3-dosis {
         font-family: 'Dosis', serif;
     }
+    
     .w3-invisible {
         display: none;
     }
-
 </style>
 
-<body ng-app="app" >
+<body ng-app="app">
     <!--<img src="img/logo.png" class="logo" />-->
 
     <ul class="w3-navbar w3-theme-d5 w3-top w3-xlarge">
-      <li><a class="w3-pink w3-lobster w3-xlarge" href="#">fancygraf</a></li>
-      <li class="w3-xlarge"><a class="w3-hover-pink w3-right w3-dosis" href="javascript:void(0)" onclick="w3_restart()">Home</a></li>
-      <li class="w3-right w3-xlarge"><a class="w3-hover-pink w3-right w3-dosis" href="javascript:void(0)" onclick="w3_open()">Notes</a></li>
+        <li><a class="w3-pink w3-lobster w3-xlarge" href="#">fancygraf</a></li>
+        <li class="w3-xlarge"><a class="w3-hover-pink w3-right w3-dosis" href="javascript:void(0)" onclick="w3_restart()">Home</a></li>
+        <li class="w3-right w3-xlarge"><a class="w3-hover-pink w3-right w3-dosis" href="javascript:void(0)" onclick="w3_open()">Notes</a></li>
     </ul>
 
-<!--dropdown notes-->
+    <!--dropdown notes-->
     <nav class="w3-modal w3-card-2" style="display:none" id="myDropnav">
         <div class="w3-container"></div>
         <div class="w3-row-padding w3-padding-bottom">
             <div class="w3-row-padding">
                 <div class="w3-card-2 w3-white w3-round">
-                        <ul class="w3-navbar w3-theme-d5 ">
-                            <li><h4 class="w3-padding-left w3-theme-d5" >Notes</h4></li>
-                            <li class="w3-right "><span onclick="w3_close()" class="w3-closebtn w3-xxlarge w3-pink" title="Close Menu">&times;</span></li>
-                        </ul>
-                        <div class="w3-row-padding w3-padding-left">
-                            <h2 class="w3-dosis"><strong>How do I make a dashed line?</strong></h2>
-                            <p>Change the dash line attribute. 4 should suffice. You may want to play with width and color for empahsis.</p>
-                            <pre>{strokeWidth: 3, strokeColor: '#1d3559', dash:4, straightFirst:false, straightLast:false,}</pre>
-                            <hr>
-                            <h2 class="w3-dosis"><strong>Why can't I made a circle?</strong></h2>
-                            <p>Cause a circle isn't a function, silly person.</p>
-                            <hr>
-                            <h2 class="w3-dosis"><strong>How do I setup the axis/grid for box plots? </strong></h2>
-                            <p>Thusly: <br /><img src="img/boxplot.jpg"/></p>
-                            <p>And set the X Max to something a bit higher than your maximum data point.</p>
-                        </div>
+                    <ul class="w3-navbar w3-theme-d5 ">
+                        <li>
+                            <h4 class="w3-padding-left w3-theme-d5">Notes</h4>
+                        </li>
+                        <li class="w3-right "><span onclick="w3_close()" class="w3-closebtn w3-xxlarge w3-pink" title="Close Menu">&times;</span></li>
+                    </ul>
+                    <div class="w3-row-padding w3-padding-left">
+                        <h2 class="w3-dosis"><strong>How do I make a dashed line?</strong></h2>
+                        <p>Change the dash line attribute. 4 should suffice. You may want to play with width and color for empahsis.</p>
+                        <pre>{strokeWidth: 3, strokeColor: '#1d3559', dash:4, straightFirst:false, straightLast:false,}</pre>
+                        <hr>
+                        <h2 class="w3-dosis"><strong>Why can't I made a circle?</strong></h2>
+                        <p>Cause a circle isn't a function, silly person.</p>
+                        <hr>
+                        <h2 class="w3-dosis"><strong>How do I setup the axis/grid for box plots? </strong></h2>
+                        <p>Thusly: <br /><img src="img/boxplot.jpg" /></p>
+                        <p>And set the X Max to something a bit higher than your maximum data point.</p>
+                    </div>
 
 
 
 
-                        
+
                 </div>
             </div>
         </div>
     </nav>
 
 
-<!--sidenav
+    <!--sidenav
 <nav class="w3-sidenav w3-white w3-card-4" style="width:20%">
   <a class="w3-hover-pink" href="#">Grid Style</a> 
   <a class="w3-hover-pink" href="#">Line Style</a> 
@@ -124,126 +127,126 @@
   <a class="w3-hover-pink" href="#">Create Inequality from Points</a>
 </nav>-->
 
-<!-- Header -->
-<div class="w3-modal w3-card-2 w3-pink w3-center w3-padding-100" style="display:block" id="loading">
-    <a name="top"></a>
-    <h1 class="w3-lobster w3-jumbo">fancygraf</h1>
-    <p class="w3-large">Graphs so fancy, you'll say "Dang, those are some fancy graphs!"</p>
-    <br>
-    <div class="w3-row w3-center">
-        <img src="img/fancygrafBLACK.png" style="width:15%" class="w3-center logo" />
-    </div>
-    <br>
-    <div class="w3-row">
-        <div class="w3-container w3-third"></div>
-        <div class="w3-container w3-third">
-            <button onclick="w3_start()" class="w3-btn-block w3-theme-d4 w3-round w3-hover-white w3-padding-16 w3-large w3-margin-top">Get Started</button>
+    <!-- Header -->
+    <div class="w3-modal w3-card-2 w3-pink w3-center w3-padding-100" style="display:block" id="loading">
+        <a name="top"></a>
+        <h1 class="w3-lobster w3-jumbo">fancygraf</h1>
+        <p class="w3-large">Graphs so fancy, you'll say "Dang, those are some fancy graphs!"</p>
+        <br>
+        <div class="w3-row w3-center">
+            <img src="img/fancygrafBLACK.png" style="width:15%" class="w3-center logo" />
         </div>
-        <div class="w3-container w3-third"></div>
-    </div>
-    <br><br>
-    <div class="container w3-white">
-        <br><br>
-        <h2 class="w3-lobster w3-xxlarge">The Team</h1>
-        <p class="w3-large">The magicians and technicians behind fancygraf</p>
-        <br><br>
-        <div class="w3-row">
-            <div class="w3-container w3-col m1 l1"></div>
-            <div class="w3-container w3-col s12 m2 l2">
-                <div class="w3-container w3-center">
-                    <img src="img/avatar_joe.png" class="w3-circle w3-center" style="width:80%"></img>
-                </div>
-                <h2 class="w3-xlarge w3-lobster">Joe Greaser</h2>
-                <p>Chief Vision Mastermind</p>
-            </div>
-            <div class="w3-container w3-col s12 m2 l2">
-                <div class="w3-container w3-center">
-                    <img src="img/avatar_megan.png" class="w3-circle w3-center" style="width:80%"></img>
-                </div>
-                <h2 class="w3-xlarge w3-lobster">Megan Burkett</h2>
-                <p>Content Futurist</p>
-            </div>
-            <div class="w3-container w3-col s12 m2 l2">
-                <div class="w3-container w3-center">
-                    <img src="img/avatar_michelle.png" class="w3-circle w3-center" style="width:80%"></img>
-                </div>
-                <h4 class="w3-xlarge w3-lobster">Michelle McRae</h4>
-                <p>Engagement Sage</p>
-            </div>
-            <div class="w3-container w3-col s12 m2 l2">
-                <div class="w3-container w3-center">
-                    <img src="img/avatar_mike.png" class="w3-circle w3-center" style="width:80%"></img>
-                </div>
-                <h2 class="w3-xlarge w3-lobster">Mike Jarrell</h2>
-                <p>Mobile Platform Guru</p>
-            </div>
-            <div class="w3-container w3-col s12 m2 l2">
-                <div class="w3-container w3-center">
-                    <img src="img/avatar_td.png" class="w3-circle w3-center" style="width:80%"></img>
-                </div>
-                <h2 class="w3-xlarge w3-lobster">TD Haines</h2>
-                <p>Human Experience Minister</p>
-            </div>
-            <div class="w3-container w3-col m1 l1"></div>
-        </div>                    
-        <br><br>
-        <img src="img/fancygrafGREY.png" style="width:80px" class="w3-center logo" /><br><br>
+        <br>
         <div class="w3-row">
             <div class="w3-container w3-third"></div>
             <div class="w3-container w3-third">
-                <a href="#top" class="w3-dosis w3-text-pink w3-large">Back to top of page</a>
+                <button onclick="w3_start()" class="w3-btn-block w3-theme-d4 w3-round w3-hover-white w3-padding-16 w3-large w3-margin-top">Get Started</button>
             </div>
             <div class="w3-container w3-third"></div>
-        </div><br><br><br>
-    </div>
-    <br><br>
-    <h2 class="w3-lobster w3-xxlarge">The Future</h2>
-    <p class="w3-large">Stay in the loop and get a head start on the new features. Subscribe below!</p>
-    <br>
-    <div class="w3-row">
-        <div class="w3-container w3-quarter"></div>
-        <div class="w3-containter w3-half">
-            <div class="w3-card-4 w3-padding w3-theme-l3">
-                <div ng-controller="subscribeController as subCtrl">
-                    <div ng-show="subCtrl.subscribed == false && subCtrl.processing == false">
-                        <div class="w3-row">
-                            <div class="w3-half w3-padding">
-                                <p><input class="w3-input w3-border-0" type="text" name="first" required  ng-model="subCtrl.firstName"><label class="w3-label w3-left w3-validate">First Name</label></p>
-                            </div>
-                            <div class="w3-half w3-padding">
-                                <p><input class="w3-input w3-border-0" type="text" name="last"  ng-model="subCtrl.lastName" required><label class="w3-label w3-left w3-validate" >Last Name</label></p>
-                            </div>
+        </div>
+        <br><br>
+        <div class="container w3-white">
+            <br><br>
+            <h2 class="w3-lobster w3-xxlarge">The Team</h1>
+                <p class="w3-large">The magicians and technicians behind fancygraf</p>
+                <br><br>
+                <div class="w3-row">
+                    <div class="w3-container w3-col m1 l1"></div>
+                    <div class="w3-container w3-col s12 m2 l2">
+                        <div class="w3-container w3-center">
+                            <img src="img/avatar_joe.png" class="w3-circle w3-center" style="width:80%"></img>
                         </div>
-                        <div class=" w3-padding">
-                          
-
-
-                           <p><input class="w3-input w3-border-0" type="email"  ng-model="subCtrl.email" name="email" required><label class="w3-label w3-left w3-validate" >Email</label></p>
-                            <p><button class="w3-btn-block w3-theme-d4 w3-round w3-hover-pink w3-padding-16 w3-large w3-margin-top" ng-click="subCtrl.subscribe(subCtrl.firstName, subCtrl.lastName, subCtrl.email)">Subscribe</button></p>
-                        </div>
+                        <h2 class="w3-xlarge w3-lobster">Joe Greaser</h2>
+                        <p>Chief Vision Mastermind</p>
                     </div>
-                     <div ng-show="subCtrl.processing == true">Processing...</div>
+                    <div class="w3-container w3-col s12 m2 l2">
+                        <div class="w3-container w3-center">
+                            <img src="img/avatar_megan.png" class="w3-circle w3-center" style="width:80%"></img>
+                        </div>
+                        <h2 class="w3-xlarge w3-lobster">Megan Burkett</h2>
+                        <p>Content Futurist</p>
+                    </div>
+                    <div class="w3-container w3-col s12 m2 l2">
+                        <div class="w3-container w3-center">
+                            <img src="img/avatar_michelle.png" class="w3-circle w3-center" style="width:80%"></img>
+                        </div>
+                        <h4 class="w3-xlarge w3-lobster">Michelle McRae</h4>
+                        <p>Engagement Sage</p>
+                    </div>
+                    <div class="w3-container w3-col s12 m2 l2">
+                        <div class="w3-container w3-center">
+                            <img src="img/avatar_mike.png" class="w3-circle w3-center" style="width:80%"></img>
+                        </div>
+                        <h2 class="w3-xlarge w3-lobster">Mike Jarrell</h2>
+                        <p>Mobile Platform Guru</p>
+                    </div>
+                    <div class="w3-container w3-col s12 m2 l2">
+                        <div class="w3-container w3-center">
+                            <img src="img/avatar_td.png" class="w3-circle w3-center" style="width:80%"></img>
+                        </div>
+                        <h2 class="w3-xlarge w3-lobster">TD Haines</h2>
+                        <p>Human Experience Minister</p>
+                    </div>
+                    <div class="w3-container w3-col m1 l1"></div>
+                </div>
+                <br><br>
+                <img src="img/fancygrafGREY.png" style="width:80px" class="w3-center logo" /><br><br>
+                <div class="w3-row">
+                    <div class="w3-container w3-third"></div>
+                    <div class="w3-container w3-third">
+                        <a href="#top" class="w3-dosis w3-text-pink w3-large">Back to top of page</a>
+                    </div>
+                    <div class="w3-container w3-third"></div>
+                </div><br><br><br>
+        </div>
+        <br><br>
+        <h2 class="w3-lobster w3-xxlarge">The Future</h2>
+        <p class="w3-large">Stay in the loop and get a head start on the new features. Subscribe below!</p>
+        <br>
+        <div class="w3-row">
+            <div class="w3-container w3-quarter"></div>
+            <div class="w3-containter w3-half">
+                <div class="w3-card-4 w3-padding w3-theme-l3">
+                    <div ng-controller="subscribeController as subCtrl">
+                        <div ng-show="subCtrl.subscribed == false && subCtrl.processing == false">
+                            <div class="w3-row">
+                                <div class="w3-half w3-padding">
+                                    <p><input class="w3-input w3-border-0" type="text" name="first" required ng-model="subCtrl.firstName"><label class="w3-label w3-left w3-validate">First Name</label></p>
+                                </div>
+                                <div class="w3-half w3-padding">
+                                    <p><input class="w3-input w3-border-0" type="text" name="last" ng-model="subCtrl.lastName" required><label class="w3-label w3-left w3-validate">Last Name</label></p>
+                                </div>
+                            </div>
+                            <div class=" w3-padding">
 
-                    <div ng-show="subCtrl.subscribed == true">You are subscribed!</div>
+
+
+                                <p><input class="w3-input w3-border-0" type="email" ng-model="subCtrl.email" name="email" required><label class="w3-label w3-left w3-validate">Email</label></p>
+                                <p><button class="w3-btn-block w3-theme-d4 w3-round w3-hover-pink w3-padding-16 w3-large w3-margin-top" ng-click="subCtrl.subscribe(subCtrl.firstName, subCtrl.lastName, subCtrl.email)">Subscribe</button></p>
+                            </div>
+                        </div>
+                        <div ng-show="subCtrl.processing == true">Processing...</div>
+
+                        <div ng-show="subCtrl.subscribed == true">You are subscribed!</div>
+                    </div>
                 </div>
             </div>
+            <div class="w3-container w3-quarter"></div>
         </div>
-        <div class="w3-container w3-quarter"></div>
-    </div>
-    <br><br>
-    <div class="w3-row">
-        <div class="w3-container w3-third"></div>
+        <br><br>
+        <div class="w3-row">
+            <div class="w3-container w3-third"></div>
             <div class="w3-container w3-third">
                 <a href="#top" class="w3-dosis w3-large">Back to top of page</a>
             </div>
-        <div class="w3-container w3-third"></div>
+            <div class="w3-container w3-third"></div>
+        </div>
+        <div class="w3-row w3-center">
+            <br><br>
+            <img src="img/fancygrafBLACK.png" style="width:80px" class="w3-center logo" /><br>
+            <p class="w3-text-black w3-small">Another fine Innovation Team product</p>
+        </div>
     </div>
-    <div class="w3-row w3-center">
-        <br><br>
-        <img src="img/fancygrafBLACK.png" style="width:80px" class="w3-center logo" /><br>
-        <p class="w3-text-black w3-small">Another fine Innovation Team product</p>
-    </div>
-</div>
 
 
 
@@ -251,7 +254,7 @@
 
     <div class="container" style="height:50px">
     </div>
-    <div class="container" >
+    <div class="container">
         <div ng-controller="graphController as grphCtrl">
             <div class="w3-row-padding">
 
@@ -260,7 +263,7 @@
                     <!--Board Attributes-->
                     <h2 class="w3-lobster w3-pink w3-padding-left w3-large">Plan it</h2>
                     <div class="w3-card-2 w3-white w3-round">
-                        <h4 class="w3-center w3-theme-d2" >Change Board Attributes</h4>
+                        <h4 class="w3-center w3-theme-d2">Change Board Attributes</h4>
                         <div class="w3-padding">
                             <div class="w3-row">
                                 <div class="w3-quarter"><em>X Min</em><br><input type="text" ng-model="grphCtrl.xmin" size="4"></div>
@@ -280,10 +283,10 @@
                                             <input class="w3-radio" type="radio" value="false" ng-model="grphCtrl.gridShow">
                                             <label class="w3-validate">Hide Grid</label>
                                         </div>
-                                    </div>  
+                                    </div>
                                 </form>
                                 <hr />
-                                 <form>
+                                <form>
                                     <div class="w3-row">
                                         <div class="w3-half">
                                             <input class="w3-radio" type="radio" value="true" ng-model="grphCtrl.axisShow" checked>
@@ -293,15 +296,15 @@
                                             <input class="w3-radio" type="radio" value="false" ng-model="grphCtrl.axisShow">
                                             <label class="w3-validate">Hide Axis</label>
                                         </div>
-                                    </div>  
+                                    </div>
                                 </form>
-                            </div>                    
+                            </div>
                             <button class="w3-btn-block w3-light-grey w3-round w3-hover-pink w3-margin-bottom" ng-click="grphCtrl.updateBoardAttributes('default')">Update Board Attributes</button>
                         </div>
                     </div>
                     <!--Line Attributes-->
                     <div class="w3-card-2 w3-white w3-round">
-                        <h4 class="w3-center w3-theme-d2" >Change line attributes</h4>
+                        <h4 class="w3-center w3-theme-d2">Change line attributes</h4>
                         <div class="w3-padding">
                             <form>
                                 <div class="w3-row">
@@ -326,7 +329,7 @@
                                         <input class="w3-radio" type="radio" value="2" ng-model="grphCtrl.lineDash">
                                         <label class="w3-validate">Dashed Line</label>
                                     </div>
-                                </div>  
+                                </div>
                             </form>
                             <hr>
                             <p class="w3-center w3-text-grey w3-small"><em>Style applies to next function graphed.</em></p>
@@ -338,7 +341,7 @@
                 <div class="w3-third">
                     <h2 class="w3-lobster w3-pink w3-padding-left w3-large">Graph it</h2>
 
-                <!--Box and Whiskers-->
+                    <!--Box and Whiskers-->
                     <div class="w3-card-2 w3-white w3-round">
                         <h4 class="w3-center w3-theme-d2" ng-click="grphCtrl.showDiv = !grphCtrl.showDiv">Statistics ^</h4>
                         <div class="w3-padding" id="boxPlot" ng-show="grphCtrl.showDiv">
@@ -350,15 +353,23 @@
                                 <div class=""><input type="text" ng-model="grphCtrl.boxPlotMed" size="4"> <em>Median</em> </div>
                                 <div class=""> <input type="text" ng-model="grphCtrl.boxPlotQ3" size="4"> <em>Q<sub>3</sub></em></div>
                                 <div class=""> <input type="text" ng-model="grphCtrl.boxPlotMax" size="4"> <em>Maximum</em></div>
-                                 <div class=""> <input type="text" ng-model="grphCtrl.boxPlotHeight" size="4"> <em>Box Height</em> (under construction)</div>
-                                 <div class=""><input type="text" ng-model="grphCtrl.boxPlotOffset" size="4"> <em>Box Offset</em> </div>
+                                <div class=""> <input type="text" ng-model="grphCtrl.boxPlotHeight" size="4"> <em>Box Height</em> (under construction)</div>
+                                <div class=""><input type="text" ng-model="grphCtrl.boxPlotOffset" size="4"> <em>Box Offset</em> </div>
                             </div>
-                             <button class="w3-btn-block w3-light-grey w3-round w3-hover-pink w3-margin-bottom" ng-click="grphCtrl.updateBoardAttributes('boxPlot')">Build Boxplot Board</button>
-                             <div class=""><em>Histogram Data</em><br />
-                              <input type="text" ng-model="grphCtrl.barChartData" size="20"> </div>
-                              <button class="w3-btn-block w3-light-grey w3-round w3-hover-pink w3-margin-bottom" ng-click="grphCtrl.updateBoardAttributes('barChart')">Build Histogram</button>
-                           
-                           
+                            <button class="w3-btn-block w3-light-grey w3-round w3-hover-pink w3-margin-bottom" ng-click="grphCtrl.updateBoardAttributes('boxPlot')">Build Boxplot Board</button>
+                            <div class=""><em>Histogram Data</em><br />
+                                <input type="text" ng-model="grphCtrl.barChartData" size="20"> </div>
+                            <button class="w3-btn-block w3-light-grey w3-round w3-hover-pink w3-margin-bottom" ng-click="grphCtrl.updateBoardAttributes('barChart')">Build Histogram</button>
+
+                            <hr />
+
+                            <div class=""><em>DotPlot Min</em> <input type="text" ng-model="grphCtrl.dotPlotMin" size="4"> </div>
+                            <div class=""><em>DotPlot Max</em> <input type="text" ng-model="grphCtrl.dotPlotMax" size="4"> </div>
+                            <div class=""><em>DotPlot Data</em><br />
+                                <input type="text" ng-model="grphCtrl.dotPlotData" size="20"> </div>
+                            <button class="w3-btn-block w3-light-grey w3-round w3-hover-pink w3-margin-bottom" ng-click="grphCtrl.updateBoardAttributes('dotPlot')">Build DotPlot</button>
+
+
                         </div>
                     </div>
 
@@ -366,11 +377,11 @@
                     <!--Function/Point-->
 
                     <div class="w3-card-2 w3-white w3-round">
-                        <h4 class="w3-center w3-theme-d2" >Create a Function or Point</h4>
+                        <h4 class="w3-center w3-theme-d2">Create a Function or Point</h4>
                         <div class="w3-padding">
                             <form>
                                 <p><strong>y = </strong>
-                                <textarea rows="1" style= "width:85%" ng-model="grphCtrl.functionForGraph" >val * 2</textarea><br /> <button class="w3-btn-block w3-light-grey w3-round w3-hover-pink w3-margin-bottom" ng-click="grphCtrl.initializeBoard('function')">Add Function to Graph</button>
+                                    <textarea rows="1" style="width:85%" ng-model="grphCtrl.functionForGraph">val * 2</textarea><br /> <button class="w3-btn-block w3-light-grey w3-round w3-hover-pink w3-margin-bottom" ng-click="grphCtrl.initializeBoard('function')">Add Function to Graph</button>
 
                             </form>
                             <div class="w3-row w3-center">
@@ -385,7 +396,7 @@
 
                     <!--Points to Lines-->
                     <div class="w3-card-2 w3-white w3-round">
-                        <h4 class="w3-center w3-theme-d2" >Build Line or Inequality with Points</h4>
+                        <h4 class="w3-center w3-theme-d2">Build Line or Inequality with Points</h4>
                         <div class="w3-padding">
                             <div class="row">
                                 <div class="w3-quarter"><em>x1</em><br><input type="text" ng-model="grphCtrl.x1" size="4"></div>
@@ -399,36 +410,41 @@
                         </div>
                     </div>
 
-                    
+
 
                 </div>
 
 
                 <!--RIGHT-->
                 <div class="w3-third">
-                    
+
                     <!--Canvas-->
                     <h2 class="w3-lobster w3-pink w3-padding-left w3-large">Grab it</h2>
                     <div class="w3-card-2 w3-white w3-round">
-                        <h4 class="w3-center w3-theme-d2" >The Graph</h4>
+                        <h4 class="w3-center w3-theme-d2">The Graph</h4>
                         <div class="w3-padding w3-center">
                             <!--Vertical Line-->
                             <button class="w3-btn-block  w3-light-grey w3-round w3-hover-pink w3-margin-bottom" ng-click="grphCtrl.initializeBoard('verticalLineTest')">Add vertical line test</button>
 
-                            <canvas id="cvoutput"  width="300" height="300" style="margin-top: 20px"></canvas><br />
-                      
+                            <p><em>DATA:</em><i>{{grphCtrl.dataSet}}</i></p>
+
+                            <canvas id="cvoutput" width="300" height="300" style="margin-top: 20px"></canvas><br />
+
                             <div id="graphContainer" class="">
 
-                      <!--      <div id="graphContainer" class="w3-invisible">-->
-                                <div id="box" class="jxgbox" style="display: hide; width:300px; height:300px; background-color: #f3f5f1;" jxg-board="grphCtrl.boardAttributes" jxg-callback="grphCtrl.cb"></div>
+                                <!--      <div id="graphContainer" class="w3-invisible">-->
+                                <h3>HTML Canvas</h3>
+                                <p><i>Intentionally mis-aligned</i></p>
+                                    <div id="box" class="jxgbox" style="align:center; width:300px; height:300px; background-color: #f3f5f1;" jxg-board="grphCtrl.boardAttributes" jxg-callback="grphCtrl.cb"></div>
+                                <p><em>ALT:</em><i>{{grphCtrl.altAttr}}</i></p>
                             </div>
                             <!--Destroy Board-->
-                            <button class="w3-btn-block  w3-grey w3-round w3-hover-red w3-margin-bottom" ng-click="grphCtrl.destroyBoard()">Clear Graph</button> 
+                            <button class="w3-btn-block  w3-grey w3-round w3-hover-red w3-margin-bottom" ng-click="grphCtrl.destroyBoard()">Clear Graph</button>
                         </div>
                     </div>
                 </div>
             </div>
-            
+
             <!--Bottom Notes-->
             <div class="w3-row w3-center">
                 <img src="img/fancygrafGREY.png" style="width:7%" class="w3-center logo" /><br>
@@ -437,23 +453,25 @@
         </div>
     </div>
 
-<script>
-function w3_open() {
-    document.getElementById("myDropnav").style.display = "block";
-}
-function w3_close() {
-    document.getElementById("myDropnav").style.display = "none";
-}
-function w3_start() {
-    document.getElementById("loading").style.display = "none";
-}
-function w3_restart() {
-    document.getElementById("loading").style.display = "block";
-}
-</script>
+    <script>
+        function w3_open() {
+            document.getElementById("myDropnav").style.display = "block";
+        }
+
+        function w3_close() {
+            document.getElementById("myDropnav").style.display = "none";
+        }
+
+        function w3_start() {
+            document.getElementById("loading").style.display = "none";
+        }
+
+        function w3_restart() {
+            document.getElementById("loading").style.display = "block";
+        }
+    </script>
 
 </body>
 
 
 </html>
-
