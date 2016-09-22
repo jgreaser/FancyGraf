@@ -213,7 +213,7 @@ function graphController($rootscope, $scope, $element, $compile, graphService, m
 
                 for (i = 0; i < value[1]; i++) {
                     //console.log(value[0] + " " + i);
-                    board.create('point', [value[0], i], {
+                    board.create('point', [value[0], i+1], {
                         fillColor: '#f21d67'
 
                     });
@@ -403,7 +403,7 @@ function graphController($rootscope, $scope, $element, $compile, graphService, m
             //getGridMax(parseInt(maxNum))
             //eval("var boardAttr = {boundingbox: ["+(vm.dotPlotMin-(maxNum*0.2))+", "+getGridMax(parseInt(maxXVal))+", " + getGridMax(parseInt(maxNum)) +  ", -3], axis: false, grid: false, showcopyright: false, shownavigation: false, registerEvents: true, snapToGrid: true, snapSizeX: 1, snapSizeY: 1 };");
 
-            eval("var boardAttr = {boundingbox: [" + (vm.dotPlotMin - (maxNum * 0.2)) + ", " + getGridMax(parseInt(maxNum)) + ", " + getGridMax(parseInt(maxXVal)) + ", -3], axis: false, grid: false, showcopyright: false, shownavigation: false, registerEvents: true, snapToGrid: true, snapSizeX: 1, snapSizeY: 1 };");
+            eval("var boardAttr = {boundingbox: [" + (vm.dotPlotMin - (maxNum * 0.2)) + ", " + (getGridMax(parseInt(maxNum))+1) + ", " + getGridMax(parseInt(maxXVal)) + ", -3], axis: false, grid: false, showcopyright: false, shownavigation: false, registerEvents: true, snapToGrid: true, snapSizeX: 1, snapSizeY: 1 };");
         } else if (typeOfGraph == 'barChart') {
             eval("var data = [" + vm.barChartData + "]");
             var maxX = getMaxData(data);

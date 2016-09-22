@@ -427,6 +427,7 @@
                             <button class="w3-btn-block  w3-light-grey w3-round w3-hover-pink w3-margin-bottom" ng-click="grphCtrl.initializeBoard('verticalLineTest')">Add vertical line test</button>
 
                             <p><em>DATA:</em><i>{{grphCtrl.dataSet}}</i></p>
+                            <p><em>ALT:</em><i>{{grphCtrl.altAttr}}</i></p>
 
                             <canvas id="cvoutput" width="300" height="300" style="margin-top: 20px"></canvas><br />
 
@@ -436,7 +437,6 @@
                                 <h3>HTML Canvas</h3>
                                 <p><i>Intentionally mis-aligned</i></p>
                                     <div id="box" class="jxgbox" style="align:center; width:300px; height:300px; background-color: #f3f5f1;" jxg-board="grphCtrl.boardAttributes" jxg-callback="grphCtrl.cb"></div>
-                                <p><em>ALT:</em><i>{{grphCtrl.altAttr}}</i></p>
                             </div>
                             <!--Destroy Board-->
                             <button class="w3-btn-block  w3-grey w3-round w3-hover-red w3-margin-bottom" ng-click="grphCtrl.destroyBoard()">Clear Graph</button>
