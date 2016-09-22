@@ -6,6 +6,7 @@ graphController.$inject = ['$rootScope', '$scope', '$element', '$compile', 'grap
 
 function graphController($rootscope, $scope, $element, $compile, graphService, mailService) {
 
+
     var vm = this;
     vm.hide = false;
 
