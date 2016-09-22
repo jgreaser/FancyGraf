@@ -8,33 +8,16 @@ function graphController($rootscope, $scope, $element, $compile, graphService, m
 
     var vm = this;
     vm.hide = false;
-    vm.board = {};
 
+    //this must have been used in the html version???
+    vm.boardAttributes = "{        boundingbox: [-10, 10, 10, -10],        axis: true,        grid: true,        showcopyright: false,        shownavigation: false,        registerEvents: true,        snapToGrid: true,        snapSizeX: 1,        snapSizeY: 1     }";
+
+    //initializing alt/data
     vm.altAttr = '';
     vm.dataSet = '';
 
-    vm.functionForGraph = 'x * 2';
-
-    //initializing functions
-    vm.boardAttributes = graphService.getBoardAttributes; //initial board attributes
-    vm.updatedBoardAttributes = "{            boundingbox: [-10, 10, 10, -10],            axis: true,            grid: true,            showcopyright: false,            shownavigation: false,            registerEvents: true,            snapToGrid: true,            snapSizeX: 1,            snapSizeY: 1         }";
-    vm.getLineAttributes = graphService.getLineAttributes; //initial line attributes
-    vm.dumpToCanvas = dumpToCanvas;
-    vm.destroyBoard = destroyBoard;
-    vm.initializeBoard = initializeBoard;
-
-    vm.boardAttributes = "{        boundingbox: [-10, 10, 10, -10],        axis: true,        grid: true,        showcopyright: false,        shownavigation: false,        registerEvents: true,        snapToGrid: true,        snapSizeX: 1,        snapSizeY: 1     }";
-
-    vm.updateBoardAttributes = updateBoardAttributes;
-
-    vm.toggleView = toggleView;
-
-    vm.pointsArray = getPointsArray;
-
-    vm.graphObject = {
-        type: graphService.getGraphType,
-        points: vm.pointsArray()
-    };
+    //points array - for use in creating arrays of points (which is then passed to a line)
+    var points = [];
 
     //initializing x/y for line points variables
     vm.x1 = 1;
@@ -51,6 +34,9 @@ function graphController($rootscope, $scope, $element, $compile, graphService, m
     //initialize new point x/y variables
     vm.newPointX = 0;
     vm.newPointY = 0;
+
+    //initialize function for graph
+    vm.functionForGraph = 'x * 2';
 
     //initialize 5 data points for box plots
     vm.boxPlotMin = 0;
@@ -87,15 +73,18 @@ function graphController($rootscope, $scope, $element, $compile, graphService, m
         snapSizeY: 1
     });
 
+    //initializing functions
+    vm.getLineAttributes = graphService.getLineAttributes; //initial line attributes
+    vm.dumpToCanvas = dumpToCanvas;
+    vm.destroyBoard = destroyBoard;
+    vm.initializeBoard = initializeBoard;
+    vm.updateBoardAttributes = updateBoardAttributes;
+    vm.pointsArray = getPointsArray;
+    vm.cb = cb;
+
 
     //one JSON to rule them all, and in the darkness bind them
-
-    //handling view stuff
-    function toggleView(divId) {
-        //$('#'+divId+'').hide();
-
-    }
-
+    //the one json not created yet, dont tremble
 
 
     //if graphService.getInitNewGraph changes and is true, and graphService.initialized() is initialized, 
@@ -111,8 +100,6 @@ function graphController($rootscope, $scope, $element, $compile, graphService, m
         }
     }, true);
 
-    vm.cb = cb;
-
     function initializeBoard(typeOfGraphObject, val) {
         cb(vm.board, typeOfGraphObject, val);
     }
@@ -127,10 +114,11 @@ function graphController($rootscope, $scope, $element, $compile, graphService, m
 
         var newPoint = [vm.newPointX, vm.newPointY];
 
-        vm.altAttr = '';
-        vm.dataSet = '';
+        //rest alt/data 
+        vm.altAttr = 'unavailable for this chart type';
+        vm.dataSet = 'unavailable for this chart type';
+        
         //If a graph object is a certain type, do that thing
-
         if (typeOfGraphObject == "function") {
             board.create('functiongraph', [function(x) {
                     //return x+2;
@@ -139,11 +127,8 @@ function graphController($rootscope, $scope, $element, $compile, graphService, m
                 lineAttr);
         }
 
-
         if (typeOfGraphObject == "line") {
-
             board.create('line', points, lineAttr);
-
         }
 
         if (typeOfGraphObject == "verticalLineTest") {
@@ -155,45 +140,21 @@ function graphController($rootscope, $scope, $element, $compile, graphService, m
                 fillColor: '#f21d67',
                 name: '(' + vm.newPointX + ',' + vm.newPointY + ')'
             });
-
-
-
-
         }
-
 
         // dotPlotData = [[1,2],[3,4]];
         if (typeOfGraphObject == "dotPlot") {
-            //console.log("dotplot!");
             eval("var data = [" + vm.dotPlotData + "]");
-            //console.log(data);    
-            console.log("ALT IS");
-            angular.forEach(data[0], function(value) {
-                vm.altAttr += "There are " + value[1] + " points above " + value[0] + ". ";
-            });
-            console.log(vm.altAttr);
 
+            vm.dataSet = '';
 
-
-
-            angular.forEach(data[0], function(value) {
-                for (i = 0; i < value[1]; i++) {
-                    vm.dataSet += value[0] + ", ";
-                }
-
-            });
-            vm.dataSet = vm.dataSet.slice(0, vm.dataSet.length - 2);
+            buildAlt(typeOfGraphObject, data[0]); //pass in the dotplot data from the eval statement
+            buildDataSet(typeOfGraphObject,data[0]);
 
             var maxNum = 0;
             var maxXVal = 0;
-            angular.forEach(data[0], function(value) {
 
-                console.log("value is " + value[0]);
-                if (value[0] > maxXVal) {
-                    maxXVal = value[0]
-                }
-            });
-
+            maxXVal = getMaxKeyVal(data[0]);
 
             var dotPlotAxis = board.create('axis', [
                 [vm.dotPlotMin, 0],
@@ -208,20 +169,12 @@ function graphController($rootscope, $scope, $element, $compile, graphService, m
             });
 
             angular.forEach(data[0], function(value) {
-                //  console.log("value is ");
-                // console.log(value[0]);
-
                 for (i = 0; i < value[1]; i++) {
-                    //console.log(value[0] + " " + i);
                     board.create('point', [value[0], i+1], {
                         fillColor: '#f21d67'
-
                     });
                 }
             });
-
-
-
         }
 
         if (typeOfGraphObject == "inequality") {
@@ -247,23 +200,105 @@ function graphController($rootscope, $scope, $element, $compile, graphService, m
         }
 
         if (typeOfGraphObject == "boxPlot") {
-            console.log("box plot!");
-
+            //determine if lines should continue past points
             lineAttr.straightFirst = false;
             lineAttr.straightLast = false;
+
+            buildAlt(typeOfGraphObject, null); //pass in the dotplot data from the eval statement
+            buildDataSet(typeOfGraphObject, null);
 
             var boxPlotAxis = board.create('axis', [
                 [vm.boxPlotMin, 0],
                 [vm.boxPlotQ1, 0]
             ]);
 
-            board.create('ticks', [boxPlotAxis, [vm.boxPlotMin, vm.boxPlotQ1, vm.boxPlotMed, vm.boxPlotQ3, vm.boxPlotMax]], {
+            board.create('ticks', [boxPlotAxis, [vm.boxPlotMin, vm.boxPlotQ1, vm.boxPlotMed, vm.boxPlotQ3, vm.boxPlotMax]], 
+            //tick attributes
+            {
                 strokeColor: '#00ff00',
                 majorHeight: 15,
                 drawLabels: true
             });
 
-            //create min-Q1 line
+            buildBoxPlotBoxes(board, lineAttr);
+        }
+
+        if (typeOfGraphObject == 'barChart') {
+
+            var barChartXAxis = board.create('axis', [
+                [0, 0],
+                [0, 10000]
+            ]);
+            var barChartYAxis = board.create('axis', [
+                [0, 0],
+                [10000, 0]
+            ]);
+
+            eval("var data = [" + vm.barChartData + "]");
+
+            board.create('chart', data, {
+                chartStyle: 'bar',
+                width: -1,
+                labels: data            });
+
+
+        }
+
+        //put a JSON build right here
+
+        vm.dumpToCanvas();
+
+    }
+
+    function destroyBoard() {
+        JXG.JSXGraph.freeBoard(vm.board);
+
+        eval("var boardAttr = " + vm.boardAttributes + ";");
+
+        //reinitiatialize board stuff
+        vm.xmin = "-10";
+        vm.ymin = "-10";
+        vm.xmax = "10";
+        vm.ymax = "10";
+        vm.board = JXG.JSXGraph.initBoard('box', boardAttr);
+
+        vm.dumpToCanvas();
+
+    }
+
+    function buildAlt(graphType, data){
+        vm.altAttr = '';
+
+        if(graphType == 'dotPlot'){
+            angular.forEach(data, function(value) {
+                vm.altAttr += "There are " + value[1] + " points above " + value[0] + ". ";
+            });
+            
+            }
+        if(graphType == 'boxPlot'){
+            vm.altAttr += "There is a line from " + vm.boxPlotMin + " to " + vm.boxPlotQ1 + ", then a box from " + vm.boxPlotQ1 + " to " + vm.boxPlotMed + ", another box from " + vm.boxPlotMed + " to " + vm.boxPlotQ3 + ", and a line from " + vm.boxPlotQ3 + " to " + vm.boxPlotMax + ".";
+        }
+    }
+
+    function buildDataSet(graphType, data){
+        
+        if  (graphType == 'dotPlot'){
+        angular.forEach(data, function(value) {
+                for (i = 0; i < value[1]; i++) {
+                    vm.dataSet += value[0] + ", ";
+                }
+
+            });
+        vm.dataSet = vm.dataSet.slice(0, vm.dataSet.length - 2);
+        }
+        if  (graphType == 'boxPlot'){
+            vm.dataSet = "Minimum value is " + vm.boxPlotMin + ",  Q1 is " + vm.boxPlotQ1 + ", Median is " + vm.boxPlotMed + ", Q3 is " + vm.boxPlotQ3 + ", and maximum value is " + vm.boxPlotMax + ".";
+        }
+
+    }
+
+              function buildBoxPlotBoxes(board, lineAttr){
+                //create min-Q1 line
             board.create('line', [
                 [vm.boxPlotMin, vm.boxPlotOffset],
                 [vm.boxPlotQ1, vm.boxPlotOffset]
@@ -307,62 +342,8 @@ function graphController($rootscope, $scope, $element, $compile, graphService, m
                 [vm.boxPlotQ3, vm.boxPlotOffset],
                 [vm.boxPlotMax, vm.boxPlotOffset]
             ], lineAttr);
+            }
 
-
-
-
-        }
-
-        if (typeOfGraphObject == 'barChart') {
-
-            var barChartXAxis = board.create('axis', [
-                [0, 0],
-                [0, 10000]
-            ]);
-            var barChartYAxis = board.create('axis', [
-                [0, 0],
-                [10000, 0]
-            ]);
-
-            eval("var data = [" + vm.barChartData + "]");
-
-            var colorsArray = [];
-
-            angular.forEach(data, function(value) {
-                colorsArray.push('#ff9900');
-            });
-
-            console.log(colorsArray);
-
-            board.create('chart', data, {
-                chartStyle: 'bar',
-                width: -1,
-                labels: data,
-                colorArray: colorsArray
-            });
-
-
-        }
-
-        //put a JSON build right here
-
-        vm.dumpToCanvas();
-
-    }
-
-    function destroyBoard() {
-        JXG.JSXGraph.freeBoard(vm.board);
-
-        eval("var boardAttr = " + vm.boardAttributes + ";");
-
-        vm.xmin = "-10";
-        vm.ymin = "-10";
-        vm.xmax = "10";
-        vm.ymax = "10";
-        vm.board = JXG.JSXGraph.initBoard('box', boardAttr);
-        vm.dumpToCanvas();
-
-    }
 
     function getGridMax(val) {
         console.log("getGridMax");
@@ -435,6 +416,16 @@ function graphController($rootscope, $scope, $element, $compile, graphService, m
         return maxData;
     }
 
+    function getMaxKeyVal(data){
+        var maxXVal = 0;
+        angular.forEach(data, function(value) {
+                if (value[0] > maxXVal) {
+                    maxXVal = value[0]
+                }
+            });
+        return maxXVal;
+    }
+
     function getPointsArray() {
         return graphService.getPointsArray();
     }
@@ -442,7 +433,6 @@ function graphController($rootscope, $scope, $element, $compile, graphService, m
     function dumpToCanvas() {
         vm.board.renderer.dumpToCanvas('cvoutput');
     }
-    var points = [];
 
     //checks to see if points are visible, then loops through points to create an array of points on the board.
     function createPoints(pointsArray, arguments) {
