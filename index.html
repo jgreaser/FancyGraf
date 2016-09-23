@@ -349,13 +349,18 @@
 
                             <div class="row">
                                 <h3>BoxPlot</h3>
+                                
                                 <div class=""><input type="text" ng-model="grphCtrl.boxPlotMin" size="4"> <em>Minimum</em> </div>
                                 <div class=""><input type="text" ng-model="grphCtrl.boxPlotQ1" size="4"> <em>Q<sub>1</sub></em> </div>
                                 <div class=""><input type="text" ng-model="grphCtrl.boxPlotMed" size="4"> <em>Median</em> </div>
                                 <div class=""> <input type="text" ng-model="grphCtrl.boxPlotQ3" size="4"> <em>Q<sub>3</sub></em></div>
                                 <div class=""> <input type="text" ng-model="grphCtrl.boxPlotMax" size="4"> <em>Maximum</em></div>
-                                <div class=""> <input type="text" ng-model="grphCtrl.boxPlotHeight" size="4"> <em>Box Height</em> (under construction)</div>
-                                <div class=""><input type="text" ng-model="grphCtrl.boxPlotOffset" size="4"> <em>Box Offset</em> </div>
+                                <h4 ng-click="grphCtrl.showBoxPlotOutliers = !grphCtrl.showBoxPlotOutliers">Show/Hide Outliers</h4>
+                                <div ng-show="grphCtrl.showBoxPlotOutliers">
+                                    <div class=""><input type="text" ng-model="grphCtrl.boxPlotMinOutliers" size="4"> <em>Minimum Outliers (enter multiple numbers as comma-separate list)</em> </div><div class=""> <input type="text" ng-model="grphCtrl.boxPlotMaxOutliers" size="4"> <em>Maximum Outliers (enter multiple numbers as comma-separate list)</em></div>
+                                </div>
+                                 <div class=""> <input type="text" ng-model="grphCtrl.boxPlotHeight" size="4"> <em>Box Height</em> (under construction)</div>
+                                    <div class=""><input type="text" ng-model="grphCtrl.boxPlotOffset" size="4"> <em>Box Offset</em> </div>
                             </div>
                             <button class="w3-btn-block w3-light-grey w3-round w3-hover-pink w3-margin-bottom" ng-click="grphCtrl.updateBoardAttributes('boxPlot')">Build Boxplot Board</button>
                             <hr />

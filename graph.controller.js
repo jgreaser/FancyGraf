@@ -40,6 +40,8 @@ function graphController($rootscope, $scope, $element, $compile, graphService, m
     vm.functionForGraph = 'x * 2';
 
     //initialize 5 data points for box plots
+    vm.showBoxPlotOutliers = false;
+    vm.boxPlotMinOutliers = [];
     vm.boxPlotMin = 0;
     vm.boxPlotQ1 = 1;
     vm.boxPlotMed = 2;
@@ -47,7 +49,7 @@ function graphController($rootscope, $scope, $element, $compile, graphService, m
     vm.boxPlotMax = 4;
     vm.boxPlotHeight = 4;
     vm.boxPlotOffset = 5;
-
+    vm.boxPlotMaxOutliers = [];
     //barchart data
     vm.barChartData = '5,1,5,1,5';
 
@@ -201,12 +203,52 @@ function graphController($rootscope, $scope, $element, $compile, graphService, m
         }
 
         if (typeOfGraphObject == "boxPlot") {
+
+            eval("var minOutliers = [" + vm.boxPlotMinOutliers + "]");
+            eval("var maxOutliers = [" + vm.boxPlotMaxOutliers + "]");
+            console.log("minOutliers " + minOutliers);
+
+
             //determine if lines should continue past points
             lineAttr.straightFirst = false;
             lineAttr.straightLast = false;
 
             buildAlt(typeOfGraphObject, null); //pass in the dotplot data from the eval statement
             buildDataSet(typeOfGraphObject, null);
+
+            console.log("vm.showBoxPlotOutliers is " + vm.showBoxPlotOutliers);
+            if (vm.showBoxPlotOutliers == true){
+                console.log("its true!");
+
+                minValue = getSmallestNumber(vm.boxPlotMin, minOutliers);
+                maxValue = getBiggestNumber(vm.boxPlotMax, maxOutliers);
+
+                console.log(minValue);
+                console.log(maxValue);
+
+                angular.forEach(minOutliers, function(value) {
+                
+                        board.create('point', [value, vm.boxPlotOffset], {
+                            face:'x',
+                            fillColor: '#f21d67'
+                        });
+            
+                 });
+
+                angular.forEach(maxOutliers, function(value) {
+               
+                         board.create('point', [value, vm.boxPlotOffset], {
+                            face:'x',
+                            fillColor: '#f21d67'
+                        });
+                     
+                 });
+
+
+
+           }
+             
+
 
             var boxPlotAxis = board.create('axis', [
                 [vm.boxPlotMin, 0],
@@ -347,11 +389,10 @@ function graphController($rootscope, $scope, $element, $compile, graphService, m
 
 
     function getGridMax(val) {
-        console.log("getGridMax");
-        console.log("val is " + (val + (val * 0.2)));
 
         return (val + (val * 0.2));
     }
+
 
 
     function updateBoardAttributes(typeOfGraph) {
@@ -360,30 +401,40 @@ function graphController($rootscope, $scope, $element, $compile, graphService, m
             eval("var boardAttr = {boundingbox: [" + vm.xmin + ", " + vm.ymax + ", " + vm.xmax + ", " + vm.ymin + "], axis: " + vm.axisShow + ", grid: " + vm.gridShow + ", showcopyright: false, shownavigation: false, registerEvents: true, snapToGrid: true, snapSizeX: 1, snapSizeY: 1 };");
         } else if (typeOfGraph == 'boxPlot') {
 
+            eval("var minOutliers = [" + vm.boxPlotMinOutliers + "]");
+            eval("var maxOutliers = [" + vm.boxPlotMaxOutliers + "]");
+
+            var minValue;
+            var maxValue;
+
+            if (vm.showBoxPlotOutliers == true){
+
+                minValue = getSmallestNumber(vm.boxPlotMin, minOutliers);
+                maxValue = getBiggestNumber(vm.boxPlotMax, maxOutliers);
+            }
+            else {
+                minValue = vm.boxPlotMin;
+                maxValue = vm.boxPlotMax;
+                }
 
 
-            eval("var boardAttr = {boundingbox: [" + (vm.boxPlotMin - (vm.boxPlotMax * 0.2)) + ", 10, " + getGridMax(parseInt(vm.boxPlotMax)) + ", -3], axis: false, grid: false, showcopyright: false, shownavigation: false, registerEvents: true, snapToGrid: true, snapSizeX: 1, snapSizeY: 1 };");
+            eval("var boardAttr = {boundingbox: [" + (minValue - (maxValue* 0.2)) + ", 10, " + getGridMax(parseInt(maxValue)) + ", -3], axis: false, grid: false, showcopyright: false, shownavigation: false, registerEvents: true, snapToGrid: true, snapSizeX: 1, snapSizeY: 1 };");
         } else if (typeOfGraph == 'dotPlot') {
             eval("var data = [" + vm.dotPlotData + "]");
             var maxNum = 0;
             var maxXVal = 0;
             angular.forEach(data[0], function(value) {
 
-                console.log("value is " + value[0]);
                 if (value[0] > maxXVal) {
                     maxXVal = value[0]
                 }
 
                 for (i = 0; i < value[1]; i++) {
-                    //console.log(value[0] + " " + i);
                     if (i > maxNum) {
                         maxNum = i;
                     }
                 }
             });
-            console.log("maxNum is " + maxNum);
-            //getGridMax(parseInt(maxNum))
-            //eval("var boardAttr = {boundingbox: ["+(vm.dotPlotMin-(maxNum*0.2))+", "+getGridMax(parseInt(maxXVal))+", " + getGridMax(parseInt(maxNum)) +  ", -3], axis: false, grid: false, showcopyright: false, shownavigation: false, registerEvents: true, snapToGrid: true, snapSizeX: 1, snapSizeY: 1 };");
 
             eval("var boardAttr = {boundingbox: [" + (vm.dotPlotMin - (maxNum * 0.2)) + ", " + (getGridMax(parseInt(maxNum))+1) + ", " + getGridMax(parseInt(maxXVal)) + ", -3], axis: false, grid: false, showcopyright: false, shownavigation: false, registerEvents: true, snapToGrid: true, snapSizeX: 1, snapSizeY: 1 };");
         } else if (typeOfGraph == 'barChart') {
@@ -550,5 +601,30 @@ function graphController($rootscope, $scope, $element, $compile, graphService, m
             straightFirst: false,
             straightLast: false,
         });
+    }
+
+
+    //utilities
+   function getSmallestNumber(value, arrayOfValues){
+       
+             angular.forEach(arrayOfValues, function(arrayValue) {
+                if (value > arrayValue){value = arrayValue;}
+
+            });
+             return value;
+
+    }
+
+
+    function getBiggestNumber(value, arrayOfValues){
+        angular.forEach(arrayOfValues, function(arrayValue) {
+
+            if (value < arrayValue){
+                value = arrayValue;
+            }
+
+            });
+        return value;
+
     }
 }
