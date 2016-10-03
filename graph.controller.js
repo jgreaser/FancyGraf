@@ -10,8 +10,10 @@ function graphController($rootscope, $scope, $element, $compile, graphService, m
     var vm = this;
     vm.hide = false;
 
+    var graphJSON = {};
+
     //this must have been used in the html version???
-    vm.boardAttributes = "{        boundingbox: [-10, 10, 10, -10],        axis: true,        grid: true,        showcopyright: false,        shownavigation: false,        registerEvents: true,        snapToGrid: true,        snapSizeX: 1,        snapSizeY: 1     }";
+    vm.boardAttributes = "{  boundingbox: [-10, 10, 10, -10],        axis: true,        grid: true,        showcopyright: false,        shownavigation: false,        registerEvents: true,        snapToGrid: true,        snapSizeX: 1,        snapSizeY: 1     }";
 
     //initializing alt/data
     vm.altAttr = '';
@@ -107,14 +109,16 @@ function graphController($rootscope, $scope, $element, $compile, graphService, m
         cb(vm.board, typeOfGraphObject, val);
     }
 
+    
+
     function cb(board, typeOfGraphObject, val) {
 
         //eval is used to get strings out of forms and convert to usable variable data
         //function fn is the function that graphs a line based on a mathmatical function (lines that pass the vertical line test)
         eval("var fn = function(x){ return " + vm.functionForGraph + ";}");
-        eval("var points = [[" + vm.x1 + "," + vm.y1 + "],[" + vm.x2 + ", " + vm.y2 + "]];");
-        eval("var lineAttr = {strokeColor: '" + vm.lineColor + "', highlightStrokeColor: '#111111',strokeColorOpacity: 1,dash: " + vm.lineDash + ",        strokeWidth: 2,        straightFirst: true,        straightLast: true,        firstArrow: false,        lastArrow: false,        trace: false,        shadow: false,        visible: true,        margin: -15};");
-
+       
+        var points = [[vm.x1,vm.y1],[vm.x2,vm.y2]]; 
+        var lineAttr = {strokeColor: vm.lineColor, highlightStrokeColor: '#111111',strokeColorOpacity: 1,dash: vm.lineDash,        strokeWidth: 2,        straightFirst: true,        straightLast: true,        firstArrow: false,        lastArrow: false,        trace: false,        shadow: false,        visible: true,        margin: -15};
         var newPoint = [vm.newPointX, vm.newPointY];
 
         //rest alt/data 
@@ -123,15 +127,14 @@ function graphController($rootscope, $scope, $element, $compile, graphService, m
         
         //If a graph object is a certain type, do that thing
         if (typeOfGraphObject == "function") {
-            board.create('functiongraph', [function(x) {
-                    //return x+2;
-                    return fn(x);
-                }],
-                lineAttr);
+            console.log("build function");
+            graphService.buildFunction(board, fn, lineAttr);
         }
 
         if (typeOfGraphObject == "line") {
-            board.create('line', points, lineAttr);
+            //board.create('line', points, lineAttr);
+            var pointsAttr = {};
+            graphService.buildLine(board, points, pointsAttr, lineAttr);
         }
 
         if (typeOfGraphObject == "verticalLineTest") {
@@ -139,10 +142,9 @@ function graphController($rootscope, $scope, $element, $compile, graphService, m
         }
 
         if (typeOfGraphObject == "point") {
-            board.create('point', newPoint, {
-                fillColor: '#f21d67',
-                name: '(' + vm.newPointX + ',' + vm.newPointY + ')'
-            });
+            graphService.buildPoint(board, newPoint, vm.newPointX, vm.newPointY);
+
+            
         }
 
         // dotPlotData = [[1,2],[3,4]];
@@ -262,8 +264,17 @@ function graphController($rootscope, $scope, $element, $compile, graphService, m
                 majorHeight: 15,
                 drawLabels: true
             });
+            var dataObject = {
+                boxPlotMin: vm.boxPlotMin,
+                boxPlotQ1: vm.boxPlotQ1,
+                boxPlotMed: vm.boxPlotMed,
+                boxPlotQ3: vm.boxPlotQ3, 
+                boxPlotMax: vm.boxPlotMax,
+                boxPlotOffset: vm.boxPlotOffset};
+            console.log("dataobject is");
+            console.log(dataObject);
+            graphService.buildBoxPlotBoxes(board, lineAttr, dataObject);
 
-            buildBoxPlotBoxes(board, lineAttr);
         }
 
         if (typeOfGraphObject == 'barChart') {
@@ -340,59 +351,9 @@ function graphController($rootscope, $scope, $element, $compile, graphService, m
 
     }
 
-              function buildBoxPlotBoxes(board, lineAttr){
-                //create min-Q1 line
-            board.create('line', [
-                [vm.boxPlotMin, vm.boxPlotOffset],
-                [vm.boxPlotQ1, vm.boxPlotOffset]
-            ], lineAttr);
-            //create Q1-Med box
-            board.create('line', [
-                [vm.boxPlotQ1, vm.boxPlotOffset - 2],
-                [vm.boxPlotQ1, vm.boxPlotOffset + 2]
-            ], lineAttr);
-            board.create('line', [
-                [vm.boxPlotQ1, vm.boxPlotOffset + 2],
-                [vm.boxPlotMed, vm.boxPlotOffset + 2]
-            ], lineAttr);
-            board.create('line', [
-                [vm.boxPlotQ1, vm.boxPlotOffset - 2],
-                [vm.boxPlotMed, vm.boxPlotOffset - 2]
-            ], lineAttr);
-            board.create('line', [
-                [vm.boxPlotMed, vm.boxPlotOffset - 2],
-                [vm.boxPlotMed, vm.boxPlotOffset + 2]
-            ], lineAttr);
-            //create Med-Q3 box
-            board.create('line', [
-                [vm.boxPlotMed, vm.boxPlotOffset - 2],
-                [vm.boxPlotMed, vm.boxPlotOffset + 2]
-            ], lineAttr);
-            board.create('line', [
-                [vm.boxPlotMed, vm.boxPlotOffset + 2],
-                [vm.boxPlotQ3, vm.boxPlotOffset + 2]
-            ], lineAttr);
-            board.create('line', [
-                [vm.boxPlotMed, vm.boxPlotOffset - 2],
-                [vm.boxPlotQ3, vm.boxPlotOffset - 2]
-            ], lineAttr);
-            board.create('line', [
-                [vm.boxPlotQ3, vm.boxPlotOffset - 2],
-                [vm.boxPlotQ3, vm.boxPlotOffset + 2]
-            ], lineAttr);
-            //create Q3-max line
-            board.create('line', [
-                [vm.boxPlotQ3, vm.boxPlotOffset],
-                [vm.boxPlotMax, vm.boxPlotOffset]
-            ], lineAttr);
-            }
+     
 
-
-    function getGridMax(val) {
-
-        return (val + (val * 0.2));
-    }
-
+ 
 
 
     function updateBoardAttributes(typeOfGraph) {
@@ -486,74 +447,11 @@ function graphController($rootscope, $scope, $element, $compile, graphService, m
         vm.board.renderer.dumpToCanvas('cvoutput');
     }
 
-    //checks to see if points are visible, then loops through points to create an array of points on the board.
-    function createPoints(pointsArray, arguments) {
-        var pointIsVisible = arguments.visible;
-
-        angular.forEach(pointsArray, function(value, key) {
-            points[key] = vm.board.create('point', [value[0], value[1]], {
-                visible: pointIsVisible
-            });
-        });
-    }
-
-    //creates a circle, defined by a center point and outer point
-    function createCircle(centerPoint, outerPoint) {
-        board.createElement('circle', [centerPoint, outerPoint], {
-            strokeColor: '#f21d67',
-            strokeWidth: 2
-        });
-    }
-
-
-    //creates a line, thats it!
-    function createLine(A, B, pointsVisible) {
-        createPoints([A, B], {
-            visible: pointsVisible
-        });
-        vm.board.createElement('line', [points[0], points[1]], {
-            strokeColor: '#000033',
-            strokeWidth: 2
-        });
-        //vm.board.createElement('line', [points[0], points[1]], {strokeColor:'#f21d67',strokeWidth:2});
-
-    }
+  
 
 
 
-
-    function createParabola(direction) {
-
-        if (direction == "positive") {
-            var line1 = board.createElement('line', [
-                [0, 0],
-                [0, 1]
-            ], {
-                visible: false
-            });
-            board.create('parabola', [
-                [0.9, 0], line1
-            ], {
-                strokeColor: '#f21d67',
-                strokeWidth: 2
-            });
-        } else if (direction == "negative") {
-            var line1 = board.createElement('line', [
-                [1, 0],
-                [1, 1]
-            ], {
-                visible: false
-            });
-            board.create('parabola', [
-                [0.0, 0], line1
-            ], {
-                strokeColor: '#f21d67',
-                strokeWidth: 2
-            });
-        }
-
-
-    }
+   
 
     function verticalLineTest(val) {
         if (val == true) {
@@ -590,18 +488,6 @@ function graphController($rootscope, $scope, $element, $compile, graphService, m
         }
     }
 
-    function addSegment() {
-        board.create('line', [
-            [-1, 0],
-            [-1, 9]
-        ], {
-            strokeWidth: 5,
-            strokeColor: '#999999',
-            dash: 2,
-            straightFirst: false,
-            straightLast: false,
-        });
-    }
 
 
     //utilities
@@ -627,4 +513,9 @@ function graphController($rootscope, $scope, $element, $compile, graphService, m
         return value;
 
     }
+       function getGridMax(val) {
+
+        return (val + (val * 0.2));
+    }
+
 }

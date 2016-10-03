@@ -68,7 +68,12 @@ function graphService() {
         setGraphType: setGraphType,
         getGraphType: getGraphType,
         getLineAttributes: getLineAttributes,
-        setLineAtrributes: setLineAtrributes
+        setLineAtrributes: setLineAtrributes,
+        buildFunction: buildFunction,
+        buildBoxPlotBoxes: buildBoxPlotBoxes,
+        buildCircle: buildCircle,
+        buildLine: buildLine,
+        buildPoint: buildPoint
        // setPointLabels: setPointLabels,
        // getPointLabels: getPointLabels
     };
@@ -158,4 +163,139 @@ function graphService() {
     function getLineAttributes() {
         return lineAttributes;
     }
+
+
+
+    function buildFunction(board, fn, lineAttr){
+        board.create('functiongraph', [function(x) {
+                    //return x+2;
+                    return fn(x);
+                }],
+                lineAttr);
+    }
+
+    //creates a line, thats it!
+    function buildLine(board, points, pointAttributes, lineAttributes) {
+        //ALTERNATE - create the points using the points array, pass in the points attributes, then create the line
+        board.create('line', points, lineAttributes);
+    }
+
+    function buildPoint(board, newPoint, newPointX, newPointY){
+        board.create('point', newPoint, {
+                fillColor: '#f21d67',
+                name: '(' + newPointX + ',' + newPointY + ')'
+            });
+    }
+
+  //checks to see if points are visible, then loops through points to create an array of points on the board.
+    function buildPoints(pointsArray, arguments) {
+        //DO BUILD POINTS
+        
+    }
+
+    function buildBoxPlotBoxes(board, lineAttr, boxPlotData){
+            console.log(boxPlotData);
+                //create min-Q1 line
+            board.create('line', [
+                [boxPlotData.boxPlotMin, boxPlotData.boxPlotOffset],
+                [boxPlotData.boxPlotQ1, boxPlotData.boxPlotOffset]
+            ], lineAttr);
+            //create Q1-Med box
+            board.create('line', [
+                [boxPlotData.boxPlotQ1, boxPlotData.boxPlotOffset - 2],
+                [boxPlotData.boxPlotQ1, boxPlotData.boxPlotOffset + 2]
+            ], lineAttr);
+            board.create('line', [
+                [boxPlotData.boxPlotQ1, boxPlotData.boxPlotOffset + 2],
+                [boxPlotData.boxPlotMed, boxPlotData.boxPlotOffset + 2]
+            ], lineAttr);
+            board.create('line', [
+                [boxPlotData.boxPlotQ1, boxPlotData.boxPlotOffset - 2],
+                [boxPlotData.boxPlotMed, boxPlotData.boxPlotOffset - 2]
+            ], lineAttr);
+            board.create('line', [
+                [boxPlotData.boxPlotMed, boxPlotData.boxPlotOffset - 2],
+                [boxPlotData.boxPlotMed, boxPlotData.boxPlotOffset + 2]
+            ], lineAttr);
+            //create Med-Q3 box
+            board.create('line', [
+                [boxPlotData.boxPlotMed, boxPlotData.boxPlotOffset - 2],
+                [boxPlotData.boxPlotMed, boxPlotData.boxPlotOffset + 2]
+            ], lineAttr);
+            board.create('line', [
+                [boxPlotData.boxPlotMed, boxPlotData.boxPlotOffset + 2],
+                [boxPlotData.boxPlotQ3, boxPlotData.boxPlotOffset + 2]
+            ], lineAttr);
+            board.create('line', [
+                [boxPlotData.boxPlotMed, boxPlotData.boxPlotOffset - 2],
+                [boxPlotData.boxPlotQ3, boxPlotData.boxPlotOffset - 2]
+            ], lineAttr);
+            board.create('line', [
+                [boxPlotData.boxPlotQ3, boxPlotData.boxPlotOffset - 2],
+                [boxPlotData.boxPlotQ3, boxPlotData.boxPlotOffset + 2]
+            ], lineAttr);
+            //create Q3-max line
+            board.create('line', [
+                [boxPlotData.boxPlotQ3, boxPlotData.boxPlotOffset],
+                [boxPlotData.boxPlotMax, boxPlotData.boxPlotOffset]
+            ], lineAttr);
+            }
+
+        //creates a circle, defined by a center point and outer point
+    function buildCircle(board, centerPoint, outerPoint) {
+        board.createElement('circle', [centerPoint, outerPoint], {
+            strokeColor: '#f21d67',
+            strokeWidth: 2
+        });
+    }
+
+     function buildParabloa(board, direction) {
+
+        if (direction == "positive") {
+            var line1 = board.createElement('line', [
+                [0, 0],
+                [0, 1]
+            ], {
+                visible: false
+            });
+            board.create('parabola', [
+                [0.9, 0], line1
+            ], {
+                strokeColor: '#f21d67',
+                strokeWidth: 2
+            });
+        } else if (direction == "negative") {
+            var line1 = board.createElement('line', [
+                [1, 0],
+                [1, 1]
+            ], {
+                visible: false
+            });
+            board.create('parabola', [
+                [0.0, 0], line1
+            ], {
+                strokeColor: '#f21d67',
+                strokeWidth: 2
+            });
+        }
+
+
+    }
+
+
+    function addSegment() {
+        board.create('line', [
+            [-1, 0],
+            [-1, 9]
+        ], {
+            strokeWidth: 5,
+            strokeColor: '#999999',
+            dash: 2,
+            straightFirst: false,
+            straightLast: false,
+        });
+    }
+
+
+
 }
