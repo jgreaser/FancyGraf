@@ -232,8 +232,9 @@ function graphController($rootscope, $scope, $element, $compile, graphService, m
                 angular.forEach(minOutliers, function(value) {
                 
                         board.create('point', [value, vm.boxPlotOffset], {
-                            face:'x',
-                            fillColor: '#ec7a00'
+                            face:'o',
+                            fillColor: '#ec7a00',
+                            strokeColor: '#ec7a00'
                         });
             
                  });
@@ -241,8 +242,9 @@ function graphController($rootscope, $scope, $element, $compile, graphService, m
                 angular.forEach(maxOutliers, function(value) {
                
                          board.create('point', [value, vm.boxPlotOffset], {
-                            face:'x',
-                            fillColor: '#ec7a00'
+                            face:'o',
+                            fillColor: '#ec7a00',
+                            strokeColor: '#ec7a00'
                         });
                      
                  });
