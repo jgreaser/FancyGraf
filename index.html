@@ -21,6 +21,7 @@
 <script src="lib/angular-jsx-graph.js"></script>
 <!---->
 <link href="https://fonts.googleapis.com/css?family=Galada" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.3/css/font-awesome.min.css">
 
 <link href="lib/jsxgraph.css" rel="stylesheet">
 
@@ -97,7 +98,7 @@
                     <div class="w3-row-padding w3-padding-left">
                         <h2 class="w3-dosis"><strong>How do I make a dashed line?</strong></h2>
                         <p>Change the dash line attribute. 4 should suffice. You may want to play with width and color for empahsis.</p>
-                        <pre>{strokeWidth: 3, strokeColor: '#1d3559', dash:4, straightFirst:false, straightLast:false,}</pre>
+                        <pre>{strokeWidth: 3, strokeColor: '#788e52', dash:4, straightFirst:false, straightLast:false,}</pre>
                         <hr>
                         <h2 class="w3-dosis"><strong>Why can't I made a circle?</strong></h2>
                         <p>Cause a circle isn't a function, silly person.</p>
@@ -263,7 +264,7 @@
                     <!--Board Attributes-->
                     <h2 class="w3-lobster w3-pink w3-padding-left w3-large">Plan it</h2>
                     <div class="w3-card-2 w3-white w3-round">
-                        <h4 class="w3-center w3-theme-d2" ng-click="grphCtrl.showDiv.boardAttr = !grphCtrl.showDiv.boardAttr">Change Board Attributes</h4>
+                        <h4 class="w3-padding-left w3-theme-d2" ng-click="grphCtrl.showDiv.boardAttr = !grphCtrl.showDiv.boardAttr"><i class="fa fa-caret-down" ng-hide="grphCtrl.showDiv.boardAttr"></i><i class="fa fa-caret-up" ng-show="grphCtrl.showDiv.boardAttr"></i> Change Board Attributes </h4>
                         <div class="w3-padding" ng-show="grphCtrl.showDiv.boardAttr">
                             <div class="w3-row">
                                 <div class="w3-quarter"><em>X Min</em><br><input type="text" ng-model="grphCtrl.xmin" size="4"></div>
@@ -299,22 +300,26 @@
                                     </div>
                                 </form>-->
                             </div>
-                            <button class="w3-btn-block w3-light-grey w3-round w3-hover-pink w3-margin-bottom" ng-click="grphCtrl.updateBoardAttributes('default')">Update Board Attributes ^</button>
+                            <button class="w3-btn-block w3-light-grey w3-round w3-hover-pink w3-margin-bottom" ng-click="grphCtrl.updateBoardAttributes('default')">Update Board Attributes</button>
                         </div>
                     </div>
                     <!--Line Attributes-->
                     <div class="w3-card-2 w3-white w3-round">
-                        <h4 class="w3-center w3-theme-d2" ng-click="grphCtrl.showDiv.lineAttr = !grphCtrl.showDiv.lineAttr">Change line attributes ^</h4>
+                        <h4 class="w3-padding-left w3-theme-d2" ng-click="grphCtrl.showDiv.lineAttr = !grphCtrl.showDiv.lineAttr"><i class="fa fa-caret-down" ng-hide="grphCtrl.showDiv.lineAttr"></i><i class="fa fa-caret-up" ng-show="grphCtrl.showDiv.lineAttr"></i> Change line attributes </h4>
                         <div class="w3-padding" ng-show="grphCtrl.showDiv.lineAttr">
                             <form>
                                 <div class="w3-row">
-                                    <div class="w3-half">
-                                        <input class="w3-radio" type="radio" value="#1d3559" ng-model="grphCtrl.lineColor" checked>
-                                        <label class="w3-validate">Dark Blue</label>
+                                    <div class="w3-third">
+                                        <input class="w3-radio" type="radio" value="#788e52" ng-model="grphCtrl.lineColor" checked>
+                                        <label class="w3-validate">Green</label>
                                     </div>
-                                    <div class="w3-half">
-                                        <input class="w3-radio" type="radio" value="#4d8ff1" ng-model="grphCtrl.lineColor">
-                                        <label class="w3-validate">Icy Blue</label>
+                                    <div class="w3-third">
+                                        <input class="w3-radio" type="radio" value="#8d37c4" ng-model="grphCtrl.lineColor">
+                                        <label class="w3-validate">Purple</label>
+                                    </div>
+                                    <div class="w3-third">
+                                        <input class="w3-radio" type="radio" value="#000000" ng-model="grphCtrl.lineColor">
+                                        <label class="w3-validate">Black</label>
                                     </div>
                                 </div>
                             </form>
@@ -343,12 +348,12 @@
 
                     <!--Box and Whiskers-->
                     <div class="w3-card-2 w3-white w3-round">
-                        <h4 class="w3-center w3-theme-d2" ng-click="grphCtrl.showDiv.stats = !grphCtrl.showDiv.stats">Statistics ^</h4>
-                        <div class="w3-padding" id="boxPlot" ng-hide="grphCtrl.showDiv.stats">
+                        <h4 class="w3-padding-left w3-theme-d2" ng-click="grphCtrl.showDiv.boxy = !grphCtrl.showDiv.boxy"><i class="fa fa-caret-down" ng-hide="grphCtrl.showDiv.boxy"></i><i class="fa fa-caret-up" ng-show="grphCtrl.showDiv.boxy"></i> Box Plot </h4>
+                        <div class="w3-padding" id="boxPlot" ng-show="grphCtrl.showDiv.boxy">
 
 
                             <div class="row">
-                                <h3>BoxPlot</h3>
+                                <h3>Box Plot</h3>
                                 
                                 <div class=""><input type="text" ng-model="grphCtrl.boxPlotMin" size="4"> <em>Minimum</em> </div>
                                 <div class=""><input type="text" ng-model="grphCtrl.boxPlotQ1" size="4"> <em>Q<sub>1</sub></em> </div>
@@ -363,17 +368,14 @@
                                     <div class=""><input type="text" ng-model="grphCtrl.boxPlotOffset" size="4"> <em>Box Offset</em> </div>
                             </div>
                             <button class="w3-btn-block w3-light-grey w3-round w3-hover-pink w3-margin-bottom" ng-click="grphCtrl.updateBoardAttributes('boxPlot')">Build Boxplot Board</button>
-                            <hr />
+                            </div>
+                        </div>
+                   
+                            <div class="w3-card-2 w3-white w3-round">
+                            <h4 class="w3-padding-left w3-theme-d2" ng-click="grphCtrl.showDiv.doty = !grphCtrl.showDiv.doty"><i class="fa fa-caret-down" ng-hide="grphCtrl.showDiv.doty"></i><i class="fa fa-caret-up" ng-show="grphCtrl.showDiv.doty"></i> Dot Plot </h4>
+                            <div class="w3-padding" ng-show="grphCtrl.showDiv.doty">
 
-                            <div class="">
-                            <h3>Histogram</h3>
-
-                            <p>Histogram Data</p>
-                                <input type="text" ng-model="grphCtrl.barChartData" size="20"> </div>
-                            <button class="w3-btn-block w3-light-grey w3-round w3-hover-pink w3-margin-bottom" ng-click="grphCtrl.updateBoardAttributes('barChart')">Build Histogram</button>
-
-                            <hr />
-                            <h3>DotPlot</h3>
+                            <h3>Dot Plot</h3>
                             <div class=""><em>DotPlot Min</em> <input type="text" ng-model="grphCtrl.dotPlotMin" size="4"> </div>
                             <!--<div class=""><em>DotPlot Max</em> <input type="text" ng-model="grphCtrl.dotPlotMax" size="4"> </div>-->
                             <div class=""><em>DotPlot Data</em><br />
@@ -385,10 +387,25 @@
                     </div>
 
 
+
+                            <div class="w3-card-2 w3-white w3-round">
+                            <h4 class="w3-padding-left  w3-theme-d2" ng-click="grphCtrl.showDiv.histy = !grphCtrl.showDiv.histy"><i class="fa fa-caret-down" ng-hide="grphCtrl.showDiv.histy"></i><i class="fa fa-caret-up" ng-show="grphCtrl.showDiv.histy"></i> Histogram </h4>
+                            <div class="w3-padding" ng-show="grphCtrl.showDiv.histy">
+                            <div class="">
+                            <h3>Histogram</h3>
+
+                            <p>Histogram Data</p>
+                                <input type="text" ng-model="grphCtrl.barChartData" size="20"> </div>
+                            <button class="w3-btn-block w3-light-grey w3-round w3-hover-pink w3-margin-bottom" ng-click="grphCtrl.updateBoardAttributes('barChart')">Build Histogram</button>
+                        </div>
+                    </div>
+                    
+
+
                     <!--Function/Point-->
 
                     <div class="w3-card-2 w3-white w3-round">
-                        <h4 class="w3-center w3-theme-d2" ng-click="grphCtrl.showDiv.function = !grphCtrl.showDiv.function">Create a Function or Point</h4>
+                        <h4 class="w3-padding-left w3-theme-d2" ng-click="grphCtrl.showDiv.function = !grphCtrl.showDiv.function"><i class="fa fa-caret-down" ng-hide="grphCtrl.showDiv.function"></i><i class="fa fa-caret-up" ng-show="grphCtrl.showDiv.function"></i> Function or Point </h4>
                         <div class="w3-padding" ng-show="grphCtrl.showDiv.function">
                             <form>
                                 <p><strong>y = </strong>
@@ -407,7 +424,7 @@
 
                     <!--Points to Lines-->
                     <div class="w3-card-2 w3-white w3-round">
-                        <h4 class="w3-center w3-theme-d2" ng-click="grphCtrl.showDiv.inequality = !grphCtrl.showDiv.inequality">Build Line or Inequality with Points</h4>
+                        <h4 class="w3-padding-left w3-theme-d2" ng-click="grphCtrl.showDiv.inequality = !grphCtrl.showDiv.inequality"><i class="fa fa-caret-down" ng-hide="grphCtrl.showDiv.inequality"></i><i class="fa fa-caret-up" ng-show="grphCtrl.showDiv.inequality"></i> Line or Inequality with Points </h4>
                         <div class="w3-padding" ng-show="grphCtrl.showDiv.inequality">
                             <div class="row">
                                 <div class="w3-quarter"><em>x1</em><br><input type="text" ng-model="grphCtrl.x1" size="4"></div>
@@ -432,7 +449,7 @@
                     <!--Canvas-->
                     <h2 class="w3-lobster w3-pink w3-padding-left w3-large">Grab it</h2>
                     <div class="w3-card-2 w3-white w3-round">
-                        <h4 class="w3-center w3-theme-d2">The Graph</h4>
+                        <h4 class="w3-padding-left w3-theme-d2"><i class="fa fa-line-chart"></i> The Graph</h4>
                         <div class="w3-padding w3-center">
                             
                    

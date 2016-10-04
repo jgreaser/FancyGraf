@@ -61,11 +61,11 @@ function graphController($rootscope, $scope, $element, $compile, graphService, m
     vm.dotPlotMax = 10;
 
     //setting some line/grid attributes
-    vm.lineColor = "#1d3559";
+    vm.lineColor = "#788e52";
     vm.lineDash = "0";
     vm.gridShow = "true";
     vm.axisShow = true;
-    vm.lineAttributes = "{strokeColor: '#1d3559', highlightStrokeColor: '#111111',strokeColorOpacity: 1,dash: 0,        strokeWidth: 2,        straightFirst: true,        straightLast: true,        firstArrow: false,        lastArrow: false,        trace: false,        shadow: false,        visible: true,        margin: -15}";
+    vm.lineAttributes = "{strokeColor: '#788e52', highlightStrokeColor: '#111111',strokeColorOpacity: 1,dash: 0,        strokeWidth: 2,        straightFirst: true,        straightLast: true,        firstArrow: false,        lastArrow: false,        trace: false,        shadow: false,        visible: true,        margin: -15}";
     vm.board = JXG.JSXGraph.initBoard('box', {
         boundingbox: [-10, 10, 10, -10],
         axis: true,
@@ -176,7 +176,8 @@ function graphController($rootscope, $scope, $element, $compile, graphService, m
             angular.forEach(data[0], function(value) {
                 for (i = 0; i < value[1]; i++) {
                     board.create('point', [value[0], i+1], {
-                        fillColor: '#f21d67'
+                        fillColor: '#ec7a00',
+                        strokeColor: '#ec7a00'
                     });
                 }
             });
@@ -188,7 +189,7 @@ function graphController($rootscope, $scope, $element, $compile, graphService, m
             });
             board.create('inequality', [inequalityLine], {
                 inverse: val,
-                strokeColor: '#1d3559',
+                strokeColor: '#788e52',
                 highlightStrokeColor: '#111111',
                 strokeColorOpacity: 1,
                 dash: 4,
@@ -232,7 +233,7 @@ function graphController($rootscope, $scope, $element, $compile, graphService, m
                 
                         board.create('point', [value, vm.boxPlotOffset], {
                             face:'x',
-                            fillColor: '#f21d67'
+                            fillColor: '#ec7a00'
                         });
             
                  });
@@ -241,7 +242,7 @@ function graphController($rootscope, $scope, $element, $compile, graphService, m
                
                          board.create('point', [value, vm.boxPlotOffset], {
                             face:'x',
-                            fillColor: '#f21d67'
+                            fillColor: '#ec7a00'
                         });
                      
                  });
@@ -289,10 +290,12 @@ function graphController($rootscope, $scope, $element, $compile, graphService, m
             ]);
 
             eval("var data = [" + vm.barChartData + "]");
+            colors = ['#788e52', '#8d37c4', '#4e767a'];
 
             board.create('chart', data, {
                 chartStyle: 'bar',
                 width: -1,
+                colors: colors,
                 labels: data            });
 
 
