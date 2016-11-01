@@ -9,6 +9,7 @@ function graphService() {
     var isInitialized = false;
     vm.initNewGraph = false;
     vm.pointLabels = false;
+   // var objectList = [];
 
     //initial board attributes 
     var boardAttributes = {
@@ -72,14 +73,13 @@ function graphService() {
         buildFunction: buildFunction,
         buildBoxPlotBoxes: buildBoxPlotBoxes,
         buildCircle: buildCircle,
-        buildLine: buildLine,
-        buildPoint: buildPoint
+       // buildLine: buildLine,
+        //buildPoint: buildPoint
        // setPointLabels: setPointLabels,
        // getPointLabels: getPointLabels
     };
 
     return service;
-
 
 
     function initialized() {
@@ -167,7 +167,7 @@ function graphService() {
 
 
     function buildFunction(board, fn, lineAttr){
-        board.create('functiongraph', [function(x) {
+        return board.create('functiongraph', [function(x) {
                     //return x+2;
                     return fn(x);
                 }],
@@ -175,23 +175,19 @@ function graphService() {
     }
 
     //creates a line, thats it!
-    function buildLine(board, points, pointAttributes, lineAttributes) {
+    /*function buildLine(board, points, pointAttributes, lineAttributes) {
         //ALTERNATE - create the points using the points array, pass in the points attributes, then create the line
-        board.create('line', points, lineAttributes);
-    }
+       return board.create('line', points, lineAttributes);
+    }*/
 
-    function buildPoint(board, newPoint, newPointX, newPointY){
-        board.create('point', newPoint, {
+   /* function buildPoint(board, newPoint, newPointX, newPointY){
+        return board.create('point', newPoint, {
                 fillColor: '#f21d67',
                 name: '(' + newPointX + ',' + newPointY + ')'
             });
     }
 
-  //checks to see if points are visible, then loops through points to create an array of points on the board.
-    function buildPoints(pointsArray, arguments) {
-        //DO BUILD POINTS
-        
-    }
+ */
 
     function buildBoxPlotBoxes(board, lineAttr, boxPlotData){
             console.log(boxPlotData);
@@ -284,7 +280,7 @@ function graphService() {
 
 
     function addSegment() {
-        board.create('line', [
+       return board.create('line', [
             [-1, 0],
             [-1, 9]
         ], {

@@ -1,0 +1,46 @@
+<html>
+
+<head>
+    <title>Simple Polished Graphs</title>
+</head>
+
+<script src="lib/angular.js"></script>
+<script src="lib/ui-bootstrap.js"></script>
+<script src="lib/angular-animate.js"></script>
+
+<!--<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">-->
+
+<!--TD's in your code, using new style sheets-->
+<link rel="stylesheet" href="lib/w3.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lobster">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Dosis">
+<link rel="stylesheet" href="lib/stylezz.css">
+
+<script src="lib/jsxgraphcore.js" charset="utf-8"></script>
+<!---->
+<script src="lib/angular-jsx-graph.js"></script>
+<!---->
+<link href="https://fonts.googleapis.com/css?family=Galada" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.3/css/font-awesome.min.css">
+
+<link href="lib/jsxgraph.css" rel="stylesheet">
+
+<script src="app.js"></script>
+<!---->
+<script src="graph.controller.js"></script>
+<script src="graph.directive.js"></script>
+
+<script src="subscribe.controller.js"></script>
+<script src="subscribe.service.js"></script>
+
+<!---->
+<script src="graph.service.js"></script>
+<!---->
+
+
+
+<body ng-app="app">
+                     <fancy-view graph-object='{"board":{"boundingbox":["-10","10","10","-10"],"axis":true,"grid":false,"showcopyright":false,"shownavigation":false,"registerEvents":false,"snapToGrid":true,"snapSizeX":1,"snapSizeY":1},"content":[{"type":"label","data":{"x":"5","y":0,"text":"a label"}},{"type":"label","data":{"x":"5","y":"5","text":"another label"}},{"type":"label","data":{"x":"0","y":"0","text":"hey!"}},{"type":"label","data":{"x":"0","y":"5","text":"OOO!"}}]}'></fancy-view>
+
+</body>
+</html>
