@@ -354,7 +354,7 @@
                                         <label class="w3-validate">Solid Line</label>
                                     </div>
                                     <div class="w3-half">
-                                        <input class="w3-radio" type="radio" value="2" ng-model="grphCtrl.lineDash">
+                                        <input class="w3-radio" type="radio" value="4" ng-model="grphCtrl.lineDash">
                                         <label class="w3-validate">Dashed Line</label>
                                     </div>
                                 </div>
@@ -466,7 +466,7 @@
 
                                 <p>Histogram Data</p>
                                 <input type="text" ng-model="grphCtrl.barChartData" size="20"> </div>
-                            <button class="w3-btn-block w3-light-grey w3-round w3-hover-pink w3-margin-bottom" ng-click="grphCtrl.updateBoardAttributes('barChart')">Build Histogram</button>
+                            <button class="w3-btn-block w3-light-grey w3-round w3-hover-pink w3-margin-bottom" ng-click="grphCtrl.cb('barChart')">Build Histogram</button>
                         </div>
                     </div>
 
@@ -520,8 +520,8 @@
                                 <div class="w3-quarter"><em>y2</em><br><input type="text" ng-model="grphCtrl.y2" size="4"></div>
                             </div>
                             <button class="w3-btn  w3-light-grey w3-round w3-hover-pink w3-margin-bottom" ng-click="grphCtrl.cb('line')">Graph Line</button>
-                            <button class="w3-btn  w3-light-grey w3-round w3-hover-pink w3-margin-bottom" ng-click="grphCtrl.initializeBoard('inequality', true)">Greater Than</button>
-                            <button class="w3-btn  w3-light-grey w3-round w3-hover-pink w3-margin-bottom" ng-click="grphCtrl.initializeBoard('inequality', false)">Less Than</button>
+                            <button class="w3-btn  w3-light-grey w3-round w3-hover-pink w3-margin-bottom" ng-click="grphCtrl.cb('inequality', true)">Greater Than</button>
+                            <button class="w3-btn  w3-light-grey w3-round w3-hover-pink w3-margin-bottom" ng-click="grphCtrl.cb('inequality', false)">Less Than</button>
 
                             <!--Vertical Line-->
                             <button class="w3-btn-block  w3-light-grey w3-round w3-hover-pink w3-margin-bottom" ng-click="grphCtrl.initializeBoard('verticalLineTest')">Add vertical line test</button>

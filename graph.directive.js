@@ -94,7 +94,7 @@ function fancyViewController($scope, $window) {
     }
 
     function cb(board, typeOfGraphObject){
-        console.log("type of vm.graphObject.board is " + typeof vm.graphObject.board);
+       // console.log("type of vm.graphObject.board is " + typeof vm.graphObject.board);
 
 
       /*  if (currentGraphObject == 0){
@@ -172,6 +172,27 @@ function fancyViewController($scope, $window) {
                 }
             });
         }
+        //----------------------//
+        //        INEQUALITY    //
+        //----------------------//
+        if (typeOfGraphObject == "inequality") {
+            var inequalityLine = board.create('line', vm.graphObject.content[currentGraphObject].data.points, {
+                visible: false
+            });
+            console.log(vm.graphObject.content[currentGraphObject].data.lineAttributes);
+            vm.graphObject.content[currentGraphObject].data.lineAttributes.inverse = vm.graphObject.content[currentGraphObject].data.equality;
+           // vm.graphObject.content[currentGraphObject].data.lineAttributes.dash = parseInt(vm.graphObject.content[currentGraphObject].data.lineAttributes.lineDash);
+            vm.graphObject.content[currentGraphObject].data.lineAttributes.straightFirst = true;
+            vm.graphObject.content[currentGraphObject].data.lineAttributes.straightLast = true;
+            vm.graphObject.content[currentGraphObject].data.lineAttributes.firstArrow = false;
+            vm.graphObject.content[currentGraphObject].data.lineAttributes.lastArrow = false;
+
+        
+
+        board.create('inequality', [inequalityLine], vm.graphObject.content[currentGraphObject].data.lineAttributes);
+
+            
+        }
 
         //----------------------//
         //        BOX PLOT      //
@@ -200,7 +221,7 @@ function fancyViewController($scope, $window) {
                         });
                      
                  });
-           }
+            }
 
            if (vm.graphObject.content[currentGraphObject].data.boxPlotAxis == "true"){
                 var boxPlotAxis = board.create('axis', [
@@ -222,6 +243,36 @@ function fancyViewController($scope, $window) {
 
 
          }
+
+        //----------------------//
+        //        BAR CHART     //
+        //----------------------//
+
+          if (typeOfGraphObject == 'barChart') {
+            
+
+            var barChartXAxis = board.create('axis', [
+                [0, 0],
+                [0, 10000]
+            ]);
+            var barChartYAxis = board.create('axis', [
+                [0, 0],
+                [10000, 0]
+            ]);
+            
+            var colors = ['#788e52', '#8d37c4', '#4e767a'];
+
+            console.log(vm.graphObject.content[currentGraphObject].data);
+
+            board.create('chart', vm.graphObject.content[currentGraphObject].data.data, {
+                chartStyle: 'bar',
+                width: -1,
+                colors: colors,
+                labels: vm.graphObject.content[currentGraphObject].data.data
+            });
+
+
+        }
 
 
 

@@ -85,7 +85,7 @@ function graphController($rootscope, $window, $scope, $element, $compile, mailSe
 
     //setting some line/grid attributes
     vm.lineColor = "#788e52";
-    vm.lineDash = "0";
+    vm.lineDash = 0;
     vm.gridShow = "true";
     vm.axisShow = "true";
     vm.lineAttributes = "{strokeColor: '#788e52', highlightStrokeColor: '#111111',strokeColorOpacity: 1,dash: 0,        strokeWidth: 2,        straightFirst: true,        straightLast: true,        firstArrow: false,        lastArrow: false,        trace: false,        shadow: false,        visible: true,        margin: -15}";
@@ -122,7 +122,7 @@ function graphController($rootscope, $window, $scope, $element, $compile, mailSe
             strokeColor: vm.lineColor,
             highlightStrokeColor: '#111111',
             strokeColorOpacity: 1,
-            dash: vm.lineDash,
+            dash: parseInt(vm.lineDash),
             strokeWidth: 2,
             straightFirst: true,
             straightLast: true,
@@ -224,36 +224,18 @@ function graphController($rootscope, $window, $scope, $element, $compile, mailSe
                     dataPlainText: buildDataSet(typeOfGraphObject, data[0])
                 }
             });
-
-
-
         }
 
         if (typeOfGraphObject == "inequality") {
             vm.graphObject.content.push({
-                type: "point",
-                data: points
-            });
-
-            var inequalityLine = board.create('line', points, {
-                visible: false
-            });
-            vm.objectList.push(board.create('inequality', [inequalityLine], {
-                inverse: val,
-                strokeColor: '#788e52',
-                highlightStrokeColor: '#111111',
-                strokeColorOpacity: 1,
-                dash: 4,
-                strokeWidth: 2,
-                straightFirst: true,
-                straightLast: true,
-                firstArrow: false,
-                lastArrow: false,
-                trace: false,
-                shadow: false,
-                visible: true,
-                margin: -15
-            }));
+                    type: "inequality",
+                    data: {
+                        points: points,
+                        lineAttributes: lineAttr,
+                        equality: val,
+                        alt: "inequality line through points [" + points[0][0] + ", " + points[0][1] + "], [" + points[1][0] + ", " + points[1][1] + "]."
+                    }
+                });
         }
 
         if (typeOfGraphObject == "boxPlot") {
@@ -289,31 +271,16 @@ function graphController($rootscope, $window, $scope, $element, $compile, mailSe
         }
 
         if (typeOfGraphObject == 'barChart') {
+            eval("var data = [" + vm.barChartData + "]");
+
             vm.graphObject.content.push({
                 type: "barChart",
-                data: vm.barChartData
+                data: {
+                    data: data,
+                    lineAttributes: lineAttr,
+                    alt: ''
+                }
             });
-
-            var barChartXAxis = board.create('axis', [
-                [0, 0],
-                [0, 10000]
-            ]);
-            var barChartYAxis = board.create('axis', [
-                [0, 0],
-                [10000, 0]
-            ]);
-
-            eval("var data = [" + vm.barChartData + "]");
-            colors = ['#788e52', '#8d37c4', '#4e767a'];
-
-            board.create('chart', data, {
-                chartStyle: 'bar',
-                width: -1,
-                colors: colors,
-                labels: data
-            });
-
-
         }
     }
 
