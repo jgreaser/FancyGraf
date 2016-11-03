@@ -89,7 +89,7 @@
     
     .blackText {
         font-size: 20px !important;
-        color: #131313 !important;
+        color: #333333 !important;
         font-weight: bold !important;
     }
 </style>
@@ -368,7 +368,29 @@
                 <!--MIDDLE-->
                 <div class="w3-third">
                     <h2 class="w3-lobster w3-pink w3-padding-left w3-large">Graph it</h2>
-
+                    <!-- ADD AXIS -->
+                    <div class="w3-card-2 w3-white w3-round">
+                        <h4 class="w3-padding-left w3-theme-d2" ng-click="grphCtrl.showDiv.axis = !grphCtrl.showDiv.axis"><i class="fa fa-caret-down" ng-hide="grphCtrl.showDiv.axis"></i><i class="fa fa-caret-up" ng-show="grphCtrl.showDiv.axis"></i> Axis </h4>
+                        <div class="w3-padding" id="boxPlot" ng-show="grphCtrl.showDiv.axis">
+                            <div class="row">
+                                <form>
+                                    <div class="w3-row">
+                                        <div class="w3-third">
+                                            <input class="w3-radio" type="radio" value="x" ng-model="grphCtrl.axisXY" checked>
+                                            <label class="w3-validate">X</label>
+                                        </div>
+                                        <div class="w3-third">
+                                            <input class="w3-radio" type="radio" value="y" ng-model="grphCtrl.axisXY">
+                                            <label class="w3-validate">Y</label>
+                                        </div>
+                                       
+                                    </div>
+                                </form>
+                            </div>
+                            
+                            <button class="w3-btn-block w3-light-grey w3-round w3-hover-pink w3-margin-bottom" ng-click="grphCtrl.cb('axis', grphCtrl.axisXY)">Add Label</button>
+                        </div>
+                    </div>
 
                     <!--Label -->
 
@@ -563,7 +585,11 @@
                 </div>
             </div>
             <div class="w3-row w3-center">
-                <pre>{{grphCtrl.graphObject}}</pre>
+              
+               <form><textarea type="text" ng-model="grphCtrl.textObject" rows="20" cols="100"></textarea>
+                <br />
+               <button ng-click="grphCtrl.setGraphObject(grphCtrl.textObject)">Build Graph from Text</button>
+                </form>
             </div>
             <!--Bottom Notes-->
             <div class="w3-row w3-center">

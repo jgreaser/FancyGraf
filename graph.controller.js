@@ -13,6 +13,7 @@ function graphController($rootscope, $window, $scope, $element, $compile, mailSe
         "board": {},
         "content": []
     };
+    vm.textObject = 'add graph JSON here'; //init textobject for text-to-graph input
 
     var currentObject = 0; //used to delete last action
     vm.objectList = []; //used to delete last action
@@ -36,6 +37,10 @@ function graphController($rootscope, $window, $scope, $element, $compile, mailSe
 
     //points array - for use in creating arrays of points (which is then passed to a line)
     var points = [];
+
+
+    //initializing value for axis x or axis y
+    vm.axisXY = 'x';
 
     //initializing x/y for line points variables
     vm.x1 = 1;
@@ -97,7 +102,7 @@ function graphController($rootscope, $window, $scope, $element, $compile, mailSe
     vm.getDisplayName = getDisplayName;
     vm.cb = cb;
     vm.deleteObject = deleteObject;
-
+    vm.setGraphObject = setGraphObject;
 
 
     function deleteObject(item) {
@@ -108,21 +113,32 @@ function graphController($rootscope, $window, $scope, $element, $compile, mailSe
         console.log(deleteObject);
     }
 
+    function setGraphObject(val){
+        console.log(JSON.parse(val));
+        vm.graphObject = JSON.parse(val);
+
+        //vm.graphObject = JSON.parse(vm.textObject);
+        console.log(vm.graphObject);
+    }
+
 
     function cb(typeOfGraphObject, val) {
 
 
         console.log("CB called, with values " + typeOfGraphObject + " and " + val);
 
+        //points array for lines
         var points = [
             [vm.x1, vm.y1],
             [vm.x2, vm.y2]
         ];
+
+        //set line  attributes
         var lineAttr = {
             strokeColor: vm.lineColor,
             highlightStrokeColor: '#111111',
             strokeColorOpacity: 1,
-            dash: parseInt(vm.lineDash),
+            dash: parseInt(vm.lineDash),//MUST parse Int or it ain't right
             strokeWidth: 2,
             straightFirst: true,
             straightLast: true,
@@ -133,17 +149,37 @@ function graphController($rootscope, $window, $scope, $element, $compile, mailSe
             visible: true,
             margin: -15
         };
+
+        //set newPoint for POINT
         var newPoint = {
             x: vm.newPointX,
             y: vm.newPointY
         };
 
-        //rest alt/data 
+        //reset alt/data 
         vm.altAttr = 'unavailable for this chart type';
         vm.dataSet = 'unavailable for this chart type';
 
+        //set alt text
         var altText = buildAlt(typeOfGraphObject);
+        //----------------------//
+        //        AXIS          //
+        //----------------------//
+    
+        if (typeOfGraphObject == "axis") {
+            vm.graphObject.content.push({
+                type: "axis",
+                data: {
+                    axis: vm.axisXY,
 
+                }
+            });
+        }
+
+
+        //----------------------//
+        ///       LABEL         //
+        //----------------------//
         if (typeOfGraphObject == "label") {
             vm.graphObject.content.push({
                 type: "label",
@@ -156,7 +192,10 @@ function graphController($rootscope, $window, $scope, $element, $compile, mailSe
                 }
             });
         }
-
+        //----------------------//
+        //        FUNCTION      //
+        //----------------------//
+    
         if (typeOfGraphObject == "function") {
             vm.graphObject.content.push({
                 type: "function",
@@ -167,7 +206,9 @@ function graphController($rootscope, $window, $scope, $element, $compile, mailSe
                 }
             });
         }
-
+        //----------------------//
+        //        LINE          //
+        //----------------------//
         if (typeOfGraphObject == "line") {
             var pointsAttr = {};
             vm.graphObject.content.push({
@@ -187,6 +228,10 @@ function graphController($rootscope, $window, $scope, $element, $compile, mailSe
             verticalLineTest(true);
         }
 
+        //-----------------------//
+        //        POINT          //
+        //-----------------------//
+
         if (typeOfGraphObject == "point") {
             vm.graphObject.content.push({
                 type: "point",
@@ -198,7 +243,10 @@ function graphController($rootscope, $window, $scope, $element, $compile, mailSe
             });
         }
 
-        // dotPlotData = [[1,2],[3,4]];
+        //----------------------//
+        //        DOT PLOT      //
+        //----------------------//
+
         if (typeOfGraphObject == "dotPlot") {
 
             eval("var data = [" + vm.dotPlotData + "]");
@@ -226,6 +274,9 @@ function graphController($rootscope, $window, $scope, $element, $compile, mailSe
             });
         }
 
+        //----------------------//
+        //        INEQUALITY    //
+        //----------------------//
         if (typeOfGraphObject == "inequality") {
             vm.graphObject.content.push({
                     type: "inequality",
@@ -238,6 +289,9 @@ function graphController($rootscope, $window, $scope, $element, $compile, mailSe
                 });
         }
 
+        //----------------------//
+        //        BOX PLOT      //
+        //----------------------//
         if (typeOfGraphObject == "boxPlot") {
 
             eval("var minOutliers = [" + vm.boxPlotMinOutliers + "]");
@@ -270,6 +324,9 @@ function graphController($rootscope, $window, $scope, $element, $compile, mailSe
             });
         }
 
+        //----------------------//
+        //        BAR CHART     //
+        //----------------------//
         if (typeOfGraphObject == 'barChart') {
             eval("var data = [" + vm.barChartData + "]");
 
@@ -342,7 +399,9 @@ function graphController($rootscope, $window, $scope, $element, $compile, mailSe
                 "snapSizeX": 1,
                 "snapSizeY": 1
             };
-        } else if (typeOfGraph == 'boxPlot') {
+        } 
+        //automatically set graph borders
+        /*else if (typeOfGraph == 'boxPlot') {
 
             eval("var minOutliers = [" + vm.boxPlotMinOutliers + "]");
             eval("var maxOutliers = [" + vm.boxPlotMaxOutliers + "]");
@@ -385,7 +444,7 @@ function graphController($rootscope, $window, $scope, $element, $compile, mailSe
 
             eval("var boardAttr = {boundingbox: [" + (0 - 1) + ", " + (maxX + (maxX * 0.2)) + ", " + (data.length + data.length * 0.2) + ", " + (0 - (maxX * 0.2)) + "], axis: false, grid: false, showcopyright: false, shownavigation: false, registerEvents: true, snapToGrid: true, snapSizeX: 1, snapSizeY: 1 };");
         }
-
+*/
 
         vm.graphObject.board = boardAttr;
 

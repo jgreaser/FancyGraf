@@ -35,6 +35,11 @@ function fancyViewController($scope, $window) {
 
     vm.update = update;
 
+
+    //initialize AXIS objects
+    var xaxis = {};
+    var yaxis = {};
+
   /////////////////////////////////////////////
  ////      INITIALIZE THE BOARD ON LOAD   ////
 /////////////////////////////////////////////
@@ -104,6 +109,34 @@ function fancyViewController($scope, $window) {
             vm.altText += " " + vm.graphObject.content[currentGraphObject].data.alt;
          }*/
 
+        //----------------------//
+        //        AXIS          //
+        //----------------------//
+    
+        if (typeOfGraphObject == "axis") {
+            if (vm.graphObject.content[currentGraphObject].data.axis == 'x'){
+                xaxis = board.create('axis',
+                    [ [0,0],[1,0] ], {
+                     label: {offset: [7, -10]}, // Doesn't do anything here.
+                     drawZero:false // Doesn't do anything here.
+                    }
+                ); 
+                xaxis.removeAllTicks();
+
+            }
+            board.create('ticks', [xaxis, 50], { // The number here is the distance between Major ticks
+                strokeColor:'#ccc',
+                majorHeight:60, // Need this because the JXG.Options one doesn't apply
+                drawLabels:true, // Needed, and only works for equidistant ticks
+                label: {offset: [-12, -10]},
+                minorTicks:5, // The NUMBER of small ticks between each Major tick
+                drawZero:true
+                }
+            );
+
+
+
+        }
 
         //----------------------//
         //        FUNCTION      //
@@ -208,7 +241,6 @@ function fancyViewController($scope, $window) {
                             strokeColor: '#ec7a00',
                             withLabel: false
                         });
-            
                  });
 
                 angular.forEach(vm.graphObject.content[currentGraphObject].data.boxPlotOutliersMax, function(value) {
