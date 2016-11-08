@@ -67,6 +67,7 @@ function graphController($rootscope, $window, $scope, $element, $compile, mailSe
     vm.labelY = 0;
     vm.labelText = '';
     vm.labelStyle = '';
+    vm.labelSize = 20;
 
     //initialize 5 data points for box plots
     vm.showBoxPlotOutliers = false;
@@ -171,6 +172,7 @@ function graphController($rootscope, $window, $scope, $element, $compile, mailSe
                 type: "axis",
                 data: {
                     axis: vm.axisXY,
+                    minorTicks: vm.minorTicks
 
                 }
             });
@@ -181,6 +183,17 @@ function graphController($rootscope, $window, $scope, $element, $compile, mailSe
         ///       LABEL         //
         //----------------------//
         if (typeOfGraphObject == "label") {
+            var style = '';
+
+            if (vm.labelStyle == "greenText"){
+                style += "greenText" + vm.labelSize;
+            }
+            if (vm.labelStyle == "purpleText"){
+                style += "purpleText" + vm.labelSize;
+            }
+            if (vm.labelStyle == "blackText"){
+                style += "blackText" + vm.labelSize;
+            }      
             vm.graphObject.content.push({
                 type: "label",
                 data: {
@@ -188,7 +201,7 @@ function graphController($rootscope, $window, $scope, $element, $compile, mailSe
                     y: vm.labelY,
                     text: vm.labelText,
                     alt: vm.labelText,
-                    labelStyle: vm.labelStyle
+                    labelStyle: style
                 }
             });
         }

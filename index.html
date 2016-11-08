@@ -75,20 +75,49 @@
         display: none;
     }
     
-    .greenText {
-        font-size: 20px !important;
+    
+      .greenTextSmall {
+        font-size: 12px !important;
+        color: #788e52 !important;
+        font-weight: bold !important;
+    }
+    .greenTextMedium {
+        font-size: 18px !important;
+        color: #788e52 !important;
+        font-weight: bold !important;
+    }
+    .greenTextLarge {
+        font-size: 24px !important;
         color: #788e52 !important;
         font-weight: bold !important;
     }
     
-    .purpleText {
-        font-size: 20px !important;
+    .purpleTextSmall {
+        font-size: 12px !important;
         color: #8d37c4 !important;
         font-weight: bold !important;
     }
-    
-    .blackText {
-        font-size: 20px !important;
+      .purpleTextMedium {
+        font-size: 18px !important;
+        color: #8d37c4 !important;
+        font-weight: bold !important;
+    }    .purpleTextLarge {
+        font-size: 24px !important;
+        color: #8d37c4 !important;
+        font-weight: bold !important;
+    }  
+    .blackTextSmall {
+        font-size: 12px !important;
+        color: #333333 !important;
+        font-weight: bold !important;
+    }
+        .blackTextMedium {
+        font-size: 18px !important;
+        color: #333333 !important;
+        font-weight: bold !important;
+    }
+        .blackTextLarge {
+        font-size: 24px !important;
         color: #333333 !important;
         font-weight: bold !important;
     }
@@ -383,7 +412,7 @@
                                             <input class="w3-radio" type="radio" value="y" ng-model="grphCtrl.axisXY">
                                             <label class="w3-validate">Y</label>
                                         </div>
-                                       
+                                        <div class="w3-third"><em>minorTicks</em> <input type="text" ng-model="grphCtrl.minorTicks" size="3"> </div>
                                     </div>
                                 </form>
                             </div>
@@ -398,8 +427,16 @@
                         <h4 class="w3-padding-left w3-theme-d2" ng-click="grphCtrl.showDiv.label = !grphCtrl.showDiv.label"><i class="fa fa-caret-down" ng-hide="grphCtrl.showDiv.label"></i><i class="fa fa-caret-up" ng-show="grphCtrl.showDiv.label"></i> Label </h4>
                         <div class="w3-padding" id="boxPlot" ng-show="grphCtrl.showDiv.label">
                             <div class="row">
-                                <div class=""><input type="text" ng-model="grphCtrl.labelX" size="4"> <em>X</em> </div>
-                                <div class=""><input type="text" ng-model="grphCtrl.labelY" size="4"> <em>Y </em> </div>
+                                <div class=""> <em>X</em> <input type="text" ng-model="grphCtrl.labelX" size="3"> | <em>Y </em> <input type="text" ng-model="grphCtrl.labelY" size="3">
+                                
+                                   Text Size <select ng-model="grphCtrl.labelSize">
+                                      <option value="Small">Small</option>
+                                      <option value="Medium">Medium</option>
+                                      <option value="Large">Large</option>
+                                    </select> 
+                                </div>
+                                <br />
+
                                 <div class=""><em>Label Text</em> <input type="text" ng-model="grphCtrl.labelText" size="15"> </div>
 
                             </div>
@@ -408,15 +445,15 @@
                                     <div class="w3-row">
                                         <div class="w3-third">
                                             <input class="w3-radio" type="radio" value="greenText" ng-model="grphCtrl.labelStyle" checked>
-                                            <label class="w3-validate greenText">Green</label>
+                                            <label class="w3-validate greenTextSmall">Green</label>
                                         </div>
                                         <div class="w3-third">
                                             <input class="w3-radio" type="radio" value="purpleText" ng-model="grphCtrl.labelStyle">
-                                            <label class="w3-validate purpleText">Purple</label>
+                                            <label class="w3-validate purpleTextSmall">Purple</label>
                                         </div>
                                         <div class="w3-third">
                                             <input class="w3-radio" type="radio" value="blackText" ng-model="grphCtrl.labelStyle">
-                                            <label class="w3-validate blackText">Black</label>
+                                            <label class="w3-validate blackTextSmall">Black</label>
                                         </div>
                                     </div>
                                 </form>
@@ -585,7 +622,7 @@
                 </div>
             </div>
             <div class="w3-row w3-center">
-              
+               <pre>{{grphCtrl.graphObject}}</pre>
                <form><textarea type="text" ng-model="grphCtrl.textObject" rows="20" cols="100"></textarea>
                 <br />
                <button ng-click="grphCtrl.setGraphObject(grphCtrl.textObject)">Build Graph from Text</button>

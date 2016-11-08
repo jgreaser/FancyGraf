@@ -123,16 +123,40 @@ function fancyViewController($scope, $window) {
                 ); 
                 xaxis.removeAllTicks();
 
-            }
-            board.create('ticks', [xaxis, 50], { // The number here is the distance between Major ticks
-                strokeColor:'#ccc',
-                majorHeight:60, // Need this because the JXG.Options one doesn't apply
+                board.create('ticks', [xaxis, 50], { // The number here is the distance between Major ticks
+                strokeColor:'#333',
+                majorHeight:20, // Need this because the JXG.Options one doesn't apply
                 drawLabels:true, // Needed, and only works for equidistant ticks
                 label: {offset: [-12, -10]},
-                minorTicks:5, // The NUMBER of small ticks between each Major tick
+                minorTicks:vm.graphObject.content[currentGraphObject].data.minorTicks, // The NUMBER of small ticks between each Major tick
                 drawZero:true
                 }
             );
+            }
+
+            if (vm.graphObject.content[currentGraphObject].data.axis == 'y'){
+                yaxis = board.create('axis',
+                    [ [0,0],[0,1] ], {
+                    insertTicks: true,
+                     label: {offset: [7, -10]}, // Doesn't do anything here.
+                     drawZero:false // Doesn't do anything here.
+                    }
+                ); 
+                yaxis.removeAllTicks();
+
+              board.create('ticks', [yaxis, 50], { // The number here is the distance between Major ticks
+                    strokeColor:'#333',
+                    majorHeight:20, // Need this because the JXG.Options one doesn't apply
+                    drawLabels:true, // Needed, and only works for equidistant ticks
+                    label: {offset: [-12, -10]},
+                    minorTicks:vm.graphObject.content[currentGraphObject].data.minorTicks, // The NUMBER of small ticks between each Major tick
+                    drawZero:true
+                    }
+                 );
+
+            }
+
+           
 
 
 
